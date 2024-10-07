@@ -34,6 +34,8 @@ class AVLTree {
 
     //need to figure out which private member functions for AVL properities are needed
     //these are inspired by class notes
+    void setHeight(nodeptr temp);
+
     void leftLeftRotation(nodeptr &temp);
     void rightRightRotation(nodeptr &temp);
     void leftRightRotation(nodeptr &temp);
@@ -47,9 +49,7 @@ class AVLTree {
     AVLTree() : root(nullptr) {} //default constructor
     AVLTree(const std::vector<int>& initialValues); //parametrized constructor
     ~AVLTree(); //destructor
-
-    void insert(int value);
-    void remove(int value);
+    
     //idk figure out which other functions are needed for this
 };
 
