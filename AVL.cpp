@@ -171,15 +171,8 @@ int AVLTree::deleteNode(nodeptr &root, int val) {
  *                                                                          *
  ****************************************************************************/
 
-//tbh not sure i need this, not sure about AVL tree implementation rn... waiting for next class!
-void AVLTree::insert(int value) {
-
-}
 
 
-void AVLTree::remove(int value) {
-
-}
 
 
 
@@ -232,11 +225,9 @@ int elementAtRank(int r) {
  *                     AVLVector replaceAtRank Function                     *
 *****************************************************************************/
 
-bool replaceAtRank(int r, int e) {
+void replaceAtRank(int r, int e) {
 
 
-    //for now
-    return 0;
 }
 
 
@@ -245,11 +236,9 @@ bool replaceAtRank(int r, int e) {
  *                     AVLVector insertAtRank Function                     *
 *****************************************************************************/
 
-bool insertAtRank(int r, int e) {
+void insertAtRank(int r, int e) {
 
 
-    //for now
-    return 0;
 }
 
 
@@ -257,11 +246,10 @@ bool insertAtRank(int r, int e) {
  *                     AVLVector removeAtRank Function                      *
 *****************************************************************************/
 
-bool removeAtRank(int r) {
+void removeAtRank(int r) {
 
 
-    //for now
-    return 0;
+
 }
 
 

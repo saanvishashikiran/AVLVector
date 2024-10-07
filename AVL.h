@@ -49,7 +49,7 @@ class AVLTree {
     AVLTree() : root(nullptr) {} //default constructor
     AVLTree(const std::vector<int>& initialValues); //parametrized constructor
     ~AVLTree(); //destructor
-    
+
     //idk figure out which other functions are needed for this
 };
 
@@ -71,9 +71,9 @@ class AVLVector {
     ~AVLVector();
 
     int elementAtRank(int r);
-    bool replaceAtRank(int r, int e);
-    bool insertAtRank(int r, int e);
-    bool removeAtRank(int r);
+    void replaceAtRank(int r, int e);
+    void insertAtRank(int r, int e);
+    void removeAtRank(int r);
     int rankOf(int e);
     void printAll();
 };
