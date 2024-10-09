@@ -35,6 +35,7 @@ class AVLTree {
     //need to figure out which private member functions for AVL properities are needed
     //these are inspired by class notes
     void setHeight(nodeptr temp);
+    int search(nodeptr &some, int val);
 
     void leftLeftRotation(nodeptr &temp);
     void rightRightRotation(nodeptr &temp);
