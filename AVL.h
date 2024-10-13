@@ -63,6 +63,7 @@ using namespace std;
 struct Node {
     int value;
     int height;
+    int size;
     Node* left;
     Node* right;
     Node* parent;
@@ -84,10 +85,10 @@ struct Node {
 
 void setHeight(nodeptr temp);
 int search(nodeptr &some, int val);
-void leftLeftRotation(nodeptr &temp);
-void rightRightRotation(nodeptr &temp);
-void leftRightRotation(nodeptr &temp);
-void rightLeftRotation(nodeptr &temp);
+nodeptr leftLeftRotation(nodeptr &temp);
+nodeptr rightRightRotation(nodeptr &temp);
+nodeptr leftRightRotation(nodeptr &temp);
+nodeptr rightLeftRotation(nodeptr &temp);
 int insertNode(nodeptr &root, int val);
 int deleteNode(nodeptr &root, int val);
 void inOrder(nodeptr node, vector<int>& vector);

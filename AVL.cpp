@@ -186,7 +186,7 @@ int insertNode(nodeptr &root, int val)
  *                  AVLTree leftLeftRotation Helper Function                *
  *****************************************************************************/
 
-void leftLeftRotation(nodeptr &temp)
+nodeptr leftLeftRotation(nodeptr &temp)
 {
     nodeptr temp1 = temp->left;
     nodeptr temp2 = temp1->left;
@@ -204,14 +204,16 @@ void leftLeftRotation(nodeptr &temp)
     }
     setHeight(temp);
     setHeight(temp1);
-    temp = temp1;
+    temp = temp1; 
+
+    return temp;
 }
 
 /****************************************************************************
  *                  AVLTree rightRightRotation Helper Function              *
  *****************************************************************************/
 
-void rightRightRotation(nodeptr &temp)
+nodeptr rightRightRotation(nodeptr &temp)
 {
     nodeptr temp1 = temp->right;
     nodeptr temp2 = temp1->right;
@@ -230,13 +232,15 @@ void rightRightRotation(nodeptr &temp)
     setHeight(temp);
     setHeight(temp1);
     temp = temp1;
+
+    return temp;
 }
 
 /****************************************************************************
  *                  AVLTree leftRightRotation Helper Function               *
  *****************************************************************************/
 
-void leftRightRotation(nodeptr &temp)
+nodeptr leftRightRotation(nodeptr &temp)
 {
     nodeptr temp1 = temp->left;
     nodeptr temp2 = temp1->right;
@@ -257,13 +261,15 @@ void leftRightRotation(nodeptr &temp)
     setHeight(temp1);
     setHeight(temp2);
     temp = temp2;
+
+    return temp;
 }
 
 /****************************************************************************
  *                  AVLTree rightLeftRotation Helper Function               *
  *****************************************************************************/
 
-void rightLeftRotation(nodeptr &temp)
+nodeptr rightLeftRotation(nodeptr &temp)
 {
     nodeptr temp1 = temp->right;
     nodeptr temp2 = temp1->left;
@@ -284,6 +290,8 @@ void rightLeftRotation(nodeptr &temp)
     setHeight(temp1);
     setHeight(temp2);
     temp = temp2;
+
+    return temp;
 }
 
 
@@ -416,7 +424,17 @@ void restoreBalance (nodeptr &node) {
 
     //left heavy tree
     if (balanceFactor > 1) {
-        if (getBalanceFactor(node->left) >= 0 )
+        if (getBalanceFactor(node->left) >= 0) {
+            node = rightRightRotation(node);
+        } else {
+            node = leftRightRotation(node);
+        }
+    } else if (balanceFactor < -1) {
+        if (getBalanceFactor(node->right) <= 0) {
+            node = leftLeftRotation(node);
+        } else {
+            node = rightLeftRotation(node);
+        }
     }
 
 }
@@ -464,7 +482,7 @@ int elementAtRank(int r)
     //checking if r is within bounds
     if (r < 0 || r > nodes.size()) {
         cout << "ERROR: Rank is out of bounds!" << endl;
-        return;
+        return 0;
     }
     
     return nodes[r];
