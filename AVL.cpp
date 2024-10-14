@@ -40,19 +40,28 @@ void setHeight(nodeptr temp)
     int heightLeft, heightRight;
     if (temp != NULL)
     {
-        if (temp->left == NULL) {
-            heightLeft = 0;
-        } else {
-            heightLeft = temp->left->height + 1;
-        }
+        // if (temp->left == NULL) {
+        //     heightLeft = 0;
+        // } else {
+        //     heightLeft = temp->left->height + 1;
+        // }
 
-        if (temp->right == NULL) {
-            heightRight = 0;
-        } else {
-            heightRight = temp->right->height + 1;
-        }
+        // if (temp->right == NULL) {
+        //     heightRight = 0;
+        // } else {
+        //     heightRight = temp->right->height + 1;
+        // }
 
-        temp->height = (heightLeft > heightRight) ? heightLeft : heightRight;
+        // temp->height = (heightLeft > heightRight) ? heightLeft : heightRight;
+
+        //trying out this code instead of given code, fix given code though
+        setHeight(temp->left);
+        setHeight(temp->right);
+
+        int heightLeft = (temp->left != NULL) ? temp->left->height : -1; // -1 for NULL children
+        int heightRight = (temp->right != NULL) ? temp->right->height : -1; // -1 for NULL children
+
+        temp->height = 1 + std::max(heightLeft, heightRight);
     }
 }
 
@@ -347,8 +356,12 @@ int deleteNode(nodeptr &root, int val)
         setHeight(temp);
         delete temp1;
     }
+
     while (temp != NULL)
     {
+        //adding this in to debug
+        setHeight(temp);
+
         if (temp->height >= 2)
         {
             if (temp->left == NULL)
@@ -380,9 +393,9 @@ int deleteNode(nodeptr &root, int val)
                 }
             }
         } // else of temp->left == NULL
+        temp = temp->parent;
     } // if temp->height >=2
-    temp = temp->parent;
-    setHeight(temp);
+    //setHeight(temp); //COMMENTING OUT TO TEST
 
     return -1; //for now
 }
@@ -440,6 +453,21 @@ void restoreBalance (nodeptr &node) {
 }
 
 
+
+/****************************************************************************
+ *                   AVLTree inOrderPrint Helper Function                   *
+ ****************************************************************************/
+ 
+ void inOrderPrint(nodeptr node) {
+    if (node != nullptr) {
+        inOrderPrint(node->left);
+        cout << node->value << " ";
+        inOrderPrint(node->right);
+    }
+}
+
+
+
 /****************************************************************************
  *                                                                          *
  *                 class AVLVector Constructors & Destructor                *
@@ -476,16 +504,10 @@ AVLVector::~AVLVector()
 
 int elementAtRank(int r)
 {
-    vector<int> nodes;
-    inOrder(root, nodes);
-
-    //checking if r is within bounds
-    if (r < 0 || r > nodes.size()) {
-        cout << "ERROR: Rank is out of bounds!" << endl;
-        return 0;
-    }
     
-    return nodes[r];
+
+    //for now
+    return 0;
 }
 
 /****************************************************************************
@@ -494,23 +516,7 @@ int elementAtRank(int r)
 
 void replaceAtRank(int r, int e)
 {
-    vector<int> nodes; //initializing vector
-    inOrder(root, nodes); //filling vector with tree values using inOrder()
-
-    //checking if r is within bounds
-    if (r < 0 || r > nodes.size()) {
-        cout << "ERROR: Rank is out of bounds!" << endl;
-        return;
-    }
-
-    nodes[r] = e;
-
-    root = nullptr;
-
-    //rebuilding tree!
-    for (int value : nodes) {
-        insertNode(root, value);
-    }
+    
 }
 
 /****************************************************************************
@@ -519,23 +525,7 @@ void replaceAtRank(int r, int e)
 
 void insertAtRank(int r, int e)
 {
-    vector<int> nodes; //initializing vector
-    inOrder(root, nodes); //filling vector with tree values using inOrder()
-
-    //checking if r is within bounds
-    if (r < 0 || r > nodes.size()) {
-        cout << "ERROR: Rank is out of bounds!" << endl;
-        return;
-    }
-
-    nodes.insert(nodes.begin() + r, e); //inserting element into vector at the specified rank
-
-    root = nullptr; //clearing AVL tree
-
-    //rebuilding tree!
-    for (int value : nodes) {
-        insertNode(root, value);
-    }
+    
 }
 
 /****************************************************************************
@@ -544,21 +534,7 @@ void insertAtRank(int r, int e)
 
 void removeAtRank(int r)
 {
-    vector<int> nodes; //initializing vector
-    inOrder(root, nodes); //filling vector with tree values using inOrder()
-
-    //checking if r is within bounds
-    if (r < 0 || r > nodes.size()) {
-        cout << "ERROR: Rank is out of bounds!" << endl;
-        return;
-    }
-
-    nodes.erase(nodes.begin() + 1);
-
-    //rebuilding tree!
-    for (int value : nodes) {
-        insertNode(root, value);
-    }
+    
 }
 
 /****************************************************************************
@@ -578,12 +554,6 @@ int rankOf(int e)
 
 void printAll()
 {
-    vector<int> nodes; //initializing vector
-    inOrder(root, nodes); //filling vector with tree values using inOrder()
-
-    for (int value : nodes) {
-        cout << value << " ";
-    }
-
+    inOrderPrint(root);
     cout << endl;
 }

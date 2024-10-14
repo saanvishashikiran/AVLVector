@@ -94,6 +94,7 @@ int deleteNode(nodeptr &root, int val);
 void inOrder(nodeptr node, vector<int>& vector);
 int getBalanceFactor (nodeptr node);
 void restoreBalance (nodeptr &node);
+void inOrderPrint(nodeptr node);
 
 
 
