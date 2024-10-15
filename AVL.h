@@ -84,18 +84,34 @@ struct Node {
  ****************************************************************************/
 
 void setHeight(nodeptr temp);
+int getHeight(nodeptr node);
 int search(nodeptr &some, int val);
 nodeptr leftLeftRotation(nodeptr &temp);
 nodeptr rightRightRotation(nodeptr &temp);
 nodeptr leftRightRotation(nodeptr &temp);
 nodeptr rightLeftRotation(nodeptr &temp);
-int insertNode(nodeptr &root, int val);
+nodeptr insertNode(nodeptr &root, int val, int rank);
 int deleteNode(nodeptr &root, int val);
-void inOrder(nodeptr node, vector<int>& vector);
 int getBalanceFactor (nodeptr node);
 void restoreBalance (nodeptr &node);
-void inOrderPrint(nodeptr node);
+void inOrderPrintByRank(nodeptr node);
+int findValueByRank(nodeptr root, int rank, int& currentRank); //testing this out to use with deleteNode function
 
+//helper function to count nodes in a subtree
+int countNodes(nodeptr node);
+
+//currently disorganized helper functions added in for different function ideas
+int findRank(nodeptr node, int e, int rankOffset = 0);
+void updateSize(nodeptr node);
+int size(nodeptr node);
+int elementAtRankHelper(nodeptr node, int r, int& priorRank);
+int sizeOfSubtree(nodeptr node);
+void inOrderPrintByRank(nodeptr node, int& priorRank);
+nodeptr getNodeAtRank(nodeptr node, int rank);
+void updateSize3(nodeptr &node);
+int getBalanceFactor2(nodeptr &node);
+void setHeight2(nodeptr &node);
+void shiftRanks(nodeptr &node);
 
 
 /****************************************************************************
@@ -119,6 +135,14 @@ class AVLVector {
     void removeAtRank(int r);
     int rankOf(int e);
     void printAll();
+
+    //testing!
+    int getRootValue() const {
+        if (root != nullptr) {
+            return root->value;  // Assuming the Node structure has a value attribute
+        }
+        return -1; // Or some indication that the tree is empty
+    }
 };
 
 

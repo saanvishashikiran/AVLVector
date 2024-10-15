@@ -1,0 +1,111 @@
+nodeptr insertNodeAtRank(nodeptr &root, int val, int rank) {
+    // Base case: If the tree is empty, create a new node
+    if (root == NULL) {
+        root = new Node(val);
+        root->height = 0;
+        root->left = NULL;
+        root->right = NULL;
+        root->size = 1; // New size for the new node
+        return root;
+    }
+
+    // Step 1: Handle rank collision
+    // Traverse to find the position of the new node
+    nodeptr temp = root;
+    nodeptr parent = NULL; // To keep track of the parent node
+    int currentRank = 0; // To track the current rank while traversing
+
+    while (temp != NULL) {
+        // Update current rank based on the size of the left subtree
+        int leftSize = (temp->left != NULL) ? temp->left->size : 0;
+        currentRank = leftSize + 1; // Current node's rank is leftSize + 1
+
+        if (rank <= currentRank) {
+            // Move to the left child if the desired rank is in the left subtree
+            parent = temp; // Set the parent
+            temp = temp->left;
+        } else {
+            // Move to the right child if the desired rank is in the right subtree
+            rank -= currentRank; // Adjust the rank for the right subtree
+            parent = temp; // Set the parent
+            temp = temp->right;
+        }
+    }
+
+    // Step 2: Insert the new node
+    // Create the new node
+    nodeptr newNode = new Node(val);
+    newNode->height = 0;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    newNode->size = 1; // New size for the new node
+
+    // If we reached a NULL position, insert the new node as a child of the parent
+    if (rank == 1) {
+        // Insert as a left child
+        parent->left = newNode;
+    } else {
+        // Insert as a right child
+        parent->right = newNode;
+    }
+
+    // Step 3: Handle rank collisions
+    // Increase the ranks of the existing nodes at the specified rank and thereafter
+    nodeptr updateNode = parent;
+    while (updateNode != NULL) {
+        updateNode->size++; // Increase the size of the subtree
+        updateNode = updateNode->parent; // Move up the tree
+    }
+
+    // Step 4: Update heights and rebalance the tree
+    // Start from the parent node and go up to update heights and balance the tree
+    // updateNode = parent;
+    // while (updateNode != NULL) {
+    //    setHeight(updateNode); // Update the height of the current node
+    //     updateNode = updateNode->parent; // Move to the parent
+    // }
+
+    // Perform AVL rotations if necessary (not shown here)
+    // You need to implement the logic to check balance and perform rotations
+    //climbing back up the tree to update heights and dealing with violations
+    temp = temp->parent; //starting from the parent of the new node
+    temp->height = 1; //setting height of parent to 1
+    done = (temp->parent == NULL); //checking if I'm at the root (parent would be null)
+    violation = false; 
+
+    while (!done) //while I haven't reached the root
+    {
+        temp = temp->parent; //moving up to parent node of temp
+        setHeight(temp); //updating hight of current node
+
+        //checking for balance violations
+        if ((temp->left == NULL) || (temp->right == NULL)) {
+            violation = true; //if one child is missing, mark violation
+        } else if ((temp->left->height - temp->right->height > 1) || (temp->right->height - temp->left->height > 1)) {
+            violation = true; //checking if the height difference exceeds 1
+        }
+
+        //performing rotations to restore balance if a violation has occurred
+        if (violation)
+        {
+            if ((temp->value >= val) && (temp->left->value >= val)) {
+                leftLeftRotation(temp);  //violation in left subtree of left child
+            } else if ((temp->value >= val) && (temp->left->value < val)) {
+                leftRightRotation(temp);  //violation in right subtree of left child
+            } else if ((temp->value < val) && (temp->right->value >= val)) {
+                rightLeftRotation(temp);  //violation in left subtree of right child
+            } else if ((temp->value < val) && (temp->right->value < val)) {
+                rightRightRotation(temp);  //violation in right subtree of right child
+            }
+
+            done = true;
+        }
+        
+        //ending the loop if done climbing back to the root.
+        if (temp == root)
+            done = true; 
+    } // while ! done
+
+
+    return root; // Return the root of the tree
+}
