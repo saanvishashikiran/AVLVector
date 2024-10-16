@@ -90,7 +90,9 @@ nodeptr leftLeftRotation(nodeptr &temp);
 nodeptr rightRightRotation(nodeptr &temp);
 nodeptr leftRightRotation(nodeptr &temp);
 nodeptr rightLeftRotation(nodeptr &temp);
-nodeptr insertNode(nodeptr &root, int val, int rank);
+// nodeptr insertNode(nodeptr &root, int val, int rank);
+// int insertNode(nodeptr &root, int val);
+// nodeptr insertNode(nodeptr &root, int val, int rank);
 int deleteNode(nodeptr &root, int val);
 int getBalanceFactor (nodeptr node);
 void restoreBalance (nodeptr &node);
@@ -112,6 +114,9 @@ void updateSize3(nodeptr &node);
 int getBalanceFactor2(nodeptr &node);
 void setHeight2(nodeptr &node);
 void shiftRanks(nodeptr &node);
+int getBalance(nodeptr node);
+void deleteSubtree(nodeptr node);
+void inOrderPrintWithChildren(nodeptr node, int& priorRank);
 
 
 /****************************************************************************
@@ -136,6 +141,13 @@ class AVLVector {
     int rankOf(int e);
     void printAll();
 
+    int insertNode(nodeptr &root, int val, int rank);
+
+
+    nodeptr getRoot() {
+        return root;
+    }
+
     //testing!
     int getRootValue() const {
         if (root != nullptr) {
@@ -143,6 +155,8 @@ class AVLVector {
         }
         return -1; // Or some indication that the tree is empty
     }
+
+
 };
 
 

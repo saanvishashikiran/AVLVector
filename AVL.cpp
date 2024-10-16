@@ -104,103 +104,194 @@ int search(nodeptr &some, int val)
  *                    AVLTree insertNode Helper Function                    *
  ****************************************************************************/
 
-//given code
-int insertNode(nodeptr &root, int val)
-{
-    bool done, violation;
-    // int myheight;
-    nodeptr temp;
-    if (root == NULL)
-    {
-        // root = new Node(val);
-        root = new Node(val);
-        root->value = val;
-        root->height = 0;
-        root->left = NULL;
-        root->right = NULL;
-        root->parent = NULL;
-        return 1;
-    }
-    else
-    {
-        temp = root;
-        done = false;
-        while (!done)
-        {
-            if (temp->value >= val)
-                if (temp->left == NULL)
-                {
-                    temp->left = new Node(val);
-                    temp->left->parent = temp;
-                    temp = temp->left;
-                    temp->value = val;
-                    temp->height = 0;
-                    temp->left = NULL;
-                    temp->right = NULL;
-                    done = true;
-                }
-                else
-                {
-                    temp = temp->left;
-                }
-            else if (temp->right == NULL)
-            {
-                temp->right = new Node(val);
-                temp->right->parent = temp;
-                temp = temp->right;
-                temp->value = val;
-                temp->height = 0;
-                temp->left = NULL;
-                temp->right = NULL;
-                done = true;
-            }
-            else
-                temp = temp->right;
-        } // end of while. Now climb back.
-        temp = temp->parent;
-        temp->height = 1;
-        done = (temp->parent == NULL);
-        violation = false;
-        while (!done)
-        {
-            temp = temp->parent;
-            setHeight(temp);
+// //given code
+// int insertNode(nodeptr &root, int val)
+// {
+//     bool done, violation;
+//     // int myheight;
+//     nodeptr temp;
+//     if (root == NULL)
+//     {
+//         // root = new Node(val);
+//         root = new Node(val);
+//         root->value = val;
+//         root->height = 0;
+//         root->left = NULL;
+//         root->right = NULL;
+//         root->parent = NULL;
+//         return 1;
+//     }
+//     else
+//     {
+//         temp = root;
+//         done = false;
+//         while (!done)
+//         {
+//             if (temp->value >= val)
+//                 if (temp->left == NULL)
+//                 {
+//                     temp->left = new Node(val);
+//                     temp->left->parent = temp;
+//                     temp = temp->left;
+//                     temp->value = val;
+//                     temp->height = 0;
+//                     temp->left = NULL;
+//                     temp->right = NULL;
+//                     done = true;
+//                 }
+//                 else
+//                 {
+//                     temp = temp->left;
+//                 }
+//             else if (temp->right == NULL)
+//             {
+//                 temp->right = new Node(val);
+//                 temp->right->parent = temp;
+//                 temp = temp->right;
+//                 temp->value = val;
+//                 temp->height = 0;
+//                 temp->left = NULL;
+//                 temp->right = NULL;
+//                 done = true;
+//             }
+//             else
+//                 temp = temp->right;
+//         } // end of while. Now climb back.
+//         temp = temp->parent;
+//         temp->height = 1;
+//         done = (temp->parent == NULL);
+//         violation = false;
+//         while (!done)
+//         {
+//             temp = temp->parent;
+//             setHeight(temp);
 
-            if ((temp->left == NULL) || (temp->right == NULL)) {
-                violation = true;
-            } else if ((temp->left->height - temp->right->height > 1) || (temp->right->height - temp->left->height > 1)) {
-                violation = true;
-            }
+//             if ((temp->left == NULL) || (temp->right == NULL)) {
+//                 violation = true;
+//             } else if ((temp->left->height - temp->right->height > 1) || (temp->right->height - temp->left->height > 1)) {
+//                 violation = true;
+//             }
 
-            if (violation)
-            {
-                if ((temp->value >= val) && (temp->left->value >= val)) {
-                    leftLeftRotation(temp);
-                } else if ((temp->value >= val) && (temp->left->value < val)) {
-                    leftRightRotation(temp);
-                } else if ((temp->value < val) && (temp->right->value >= val)) {
-                    rightLeftRotation(temp);
-                } else if ((temp->value < val) && (temp->right->value < val)) {
-                    rightRightRotation(temp);
-                }
+//             if (violation)
+//             {
+//                 if ((temp->value >= val) && (temp->left->value >= val)) {
+//                     leftLeftRotation(temp);
+//                 } else if ((temp->value >= val) && (temp->left->value < val)) {
+//                     leftRightRotation(temp);
+//                 } else if ((temp->value < val) && (temp->right->value >= val)) {
+//                     rightLeftRotation(temp);
+//                 } else if ((temp->value < val) && (temp->right->value < val)) {
+//                     rightRightRotation(temp);
+//                 }
 
-                done = true;
-            }
+//                 done = true;
+//             }
 
-            if (temp == root)
-                done = true;
-        } // while ! done
-        return 1;
-    } // end of else
-}
+//             if (temp == root)
+//                 done = true;
+//         } // while ! done
+//         return 1;
+//     } // end of else
+// }
 
 
+// nodeptr insertNode(nodeptr &root, int val, int rank) {
+//     bool done, violation;
+//     nodeptr temp;
+
+//     if (root == NULL) {
+//         root = new Node(val);
+//         root->value = val;
+//         root->height = 0;
+//         root->size = 1; // New node has size 1
+//         root->left = NULL;
+//         root->right = NULL;
+//         root->parent = NULL;
+//         return root;
+//     } else {
+//         temp = root;
+//         done = false;
+        
+//         int leftSubtreeSize = (temp->left != NULL) ? temp->left->size : 0;
+
+//         while (!done) {
+//             // Insert into the left subtree if rank <= leftSubtreeSize + 1
+//             if (rank <= leftSubtreeSize + 1) {
+//                 if (temp->left == NULL) {
+//                     temp->left = new Node(val);
+//                     temp->left->parent = temp;
+//                     temp = temp->left;
+//                     temp->value = val;
+//                     temp->height = 0;
+//                     temp->size = 1;
+//                     temp->left = NULL;
+//                     temp->right = NULL;
+//                     done = true;
+//                 } else {
+//                     temp = temp->left;
+//                 }
+//             } 
+//             // Insert into the right subtree, adjust the rank accordingly
+//             else {
+//                 if (temp->right == NULL) {
+//                     temp->right = new Node(val);
+//                     temp->right->parent = temp;
+//                     temp = temp->right;
+//                     temp->value = val;
+//                     temp->height = 0;
+//                     temp->size = 1;
+//                     temp->left = NULL;
+//                     temp->right = NULL;
+//                     done = true;
+//                 } else {
+//                     rank = rank - (leftSubtreeSize + 1);  // Adjust rank for the right subtree
+//                     temp = temp->right;
+//                 }
+//             }
+
+//             // Update leftSubtreeSize based on the new position of the temp node
+//             leftSubtreeSize = (temp->left != NULL) ? temp->left->size : 0;
+//         }
+
+//         // Climb back up and update the size and height of each node
+//         temp = temp->parent;
+//         while (temp != NULL) {
+//             // Update the size of each node: size = size of left subtree + size of right subtree + 1 (for itself)
+//             temp->size = 1 + ((temp->left != NULL) ? temp->left->size : 0) + ((temp->right != NULL) ? temp->right->size : 0);
+            
+//             // Update height
+//             setHeight(temp);
+
+//             // Check balance factor and rebalance if necessary
+//             int balanceFactor = getBalanceFactor2(temp);
+//             if (balanceFactor > 1) { // Left heavy
+//                 if (rank <= leftSubtreeSize + 1) {
+//                     temp = leftLeftRotation(temp);  // Left-Left case
+//                 } else {
+//                     temp = leftRightRotation(temp); // Left-Right case
+//                 }
+//             } 
+//             else if (balanceFactor < -1) { // Right heavy
+//                 if (rank > leftSubtreeSize + 1) {
+//                     temp = rightRightRotation(temp); // Right-Right case
+//                 } else {
+//                     temp = rightLeftRotation(temp);  // Right-Left case
+//                 }
+//             }
+
+//             // Move up to parent
+//             temp = temp->parent;
+//         }
+
+//         return root;
+//     }
+// }
 
 
 /****************************************************************************
  *    Modified AVLTree insertNode Helper Function For Rank. Need to debug.  *
  ****************************************************************************/
-
+//sort of working rn 9:13pm
 // nodeptr insertNode(nodeptr &root, int val, int rank) {
 //     if (root == NULL) {
 //         root = new Node(val);
@@ -240,56 +331,188 @@ int insertNode(nodeptr &root, int val)
 //     int balanceFactor = getBalanceFactor2(temp);
 //     if (balanceFactor > 1) {
 //         if (rank <= leftSubtreeSize + 1) {
-//             temp = leftLeftRotation(temp);  // Left-Left case
+//             temp = leftLeftRotation(temp);  //left-left case
 //         } else {
-//             temp = leftRightRotation(temp);  // Left-Right case
+//             temp = leftRightRotation(temp);  //left-right case
 //         }
 //     } else if (balanceFactor < -1) {
 //         if (rank > leftSubtreeSize + 1) {
-//             temp = rightRightRotation(temp);  // Right-Right case
+//             temp = rightRightRotation(temp);  //right-right case
 //         } else {
-//             temp = rightLeftRotation(temp);  // Right-Left case
+//             temp = rightLeftRotation(temp);  //right-left case
 //         }
 //     }
 
 //     return temp;
 // }
 
-// //helper function to update the size of a node
-// void updateSize3(nodeptr &node) {
-//     if (node == NULL) return;
-//     int leftSize = (node->left != NULL) ? node->left->size : 0;
-//     int rightSize = (node->right != NULL) ? node->right->size : 0;
-//     node->size = leftSize + rightSize + 1;
-// }
+//fixing after david's OH
+int AVLVector::insertNode(nodeptr &currentNode, int val, int rank) {
+    if (currentNode == NULL) {
+        currentNode = new Node(val);
+        currentNode->size = 1;  // this node is the only node in its subtree
+        currentNode->height = 1;  // single node has height 1
+        currentNode->left = NULL;
+        currentNode->right = NULL;
+        currentNode->parent = NULL;
+        cout << "currentNode was NULL" << endl;
+        return 1;
+    }
+
+    nodeptr temp = currentNode;
+    int leftSubtreeSize = (temp->left != NULL) ? temp->left->size : 0;
+
+    //inserting into the left subtree or at the current node's rank
+    if (rank <= leftSubtreeSize + 1) {
+        cout << "rank <= leftSize + 1" << endl;
+        // If inserting at a rank that collides, shift ranks of all subsequent nodes
+        if (rank == leftSubtreeSize + 1) {
+            shiftRanks(temp->right);  //shifting nodes in the right subtree
+        }
+        // Insert into the left subtree
+        int result = insertNode(temp->left, val, rank);
+        temp->left->parent = temp;
+    } 
+    //inserting into the right subtree
+    else {
+        cout << "inserting " << val << " into right subtree" << endl;
+        // Adjust rank for insertion into the right subtree
+        int result = insertNode(temp->right, val, rank - (leftSubtreeSize + 1));
+        temp->right->parent = temp;
+    }
+
+    //updating size and height after insertion
+    updateSize3(temp);
+    setHeight2(temp);
+
+    //balancing the tree
+    int balanceFactor = getBalanceFactor2(temp);
+    if (balanceFactor > 1) {
+        if (rank <= leftSubtreeSize + 1) {
+            cout << "left left case while inserting " << val <<  endl;
+            temp = leftLeftRotation(temp);  //left-left case
+        } else {
+            cout << "left right case while inserting " << val << endl;
+            temp = leftRightRotation(temp);  //left-right case
+        }
+    } else if (balanceFactor < -1) {
+        if (rank > leftSubtreeSize + 1) {
+            cout << "right right case while inserting " << val << endl;
+            temp = rightRightRotation(temp);  //right-right case
+        } else {
+            cout << "right left case while inserting " << val << endl;
+            temp = rightLeftRotation(temp);  //right-left case
+        }
+    }
+
+    //adding in
+    currentNode = temp;
+
+    return 1;
+}
+
+//helper function to update the size of a node
+void updateSize3(nodeptr &node) {
+    if (node == NULL) return;
+    int leftSize = (node->left != NULL) ? node->left->size : 0;
+    int rightSize = (node->right != NULL) ? node->right->size : 0;
+    node->size = leftSize + rightSize + 1;
+}
 
 // //function for calculating balance factor of a node
-// int getBalanceFactor2(nodeptr &node) {
-//     if (node == NULL) return 0;
-//     int leftHeight = (node->left != NULL) ? node->left->height : 0;
-//     int rightHeight = (node->right != NULL) ? node->right->height : 0;
-//     return leftHeight - rightHeight;
-// }
+int getBalanceFactor2(nodeptr &node) {
+    if (node == NULL) return 0;
+    int leftHeight = (node->left != NULL) ? node->left->height : 0;
+    int rightHeight = (node->right != NULL) ? node->right->height : 0;
+    return leftHeight - rightHeight;
+}
 
-// //function for updating height of a node
-// void setHeight2(nodeptr &node) {
-//     if (node == NULL) return;
-//     int leftHeight = (node->left != NULL) ? node->left->height : 0;
-//     int rightHeight = (node->right != NULL) ? node->right->height : 0;
-//     node->height = max(leftHeight, rightHeight) + 1;
-// }
+//function for updating height of a node
+void setHeight2(nodeptr &node) {
+    if (node == NULL) return;
+    int leftHeight = (node->left != NULL) ? node->left->height : 0;
+    int rightHeight = (node->right != NULL) ? node->right->height : 0;
+    node->height = max(leftHeight, rightHeight) + 1;
+}
 
-// //helper function for shifting ranks of nodes in the right subtree
-// void shiftRanks(nodeptr &node) {
-//     if (node == NULL) return;
+//helper function for shifting ranks of nodes in the right subtree
+void shiftRanks(nodeptr &node) {
+    if (node == NULL) return;
 
-//     nodeptr temp = node;
-//     // Perform rank shift on the current node
-//     while (temp != NULL) {
-//         updateSize(temp);  // Update the size of the current node
-//         temp = temp->right;  // Shift to the next node in the right subtree
+    nodeptr temp = node;
+    // Perform rank shift on the current node
+    while (temp != NULL) {
+        updateSize(temp);  // Update the size of the current node
+        temp = temp->right;  // Shift to the next node in the right subtree
+    }
+}
+
+// nodeptr insertNode(nodeptr &root, int val, int rank) {
+//     if (root == NULL) {
+//         root = new Node(val); // Create a new node with the value
+//         root->size = 1;       // Single node has size 1
+//         root->height = 1;     // Single node has height 1
+//         root->left = NULL;
+//         root->right = NULL;
+//         root->parent = NULL;
+        
+//         // Debug output
+//         cout << "Inserted node with value: " << val << " at rank: " << rank << endl;
+//         return root;
 //     }
+
+//     nodeptr temp = root;
+//     int leftSubtreeSize = (temp->left != NULL) ? temp->left->size : 0;
+
+//     // Debug output
+//     cout << "Visiting node with value: " << temp->value << " | Current rank: " << rank << endl;
+
+//     // Insert in the left subtree if rank <= leftSubtreeSize + 1
+//     if (rank <= leftSubtreeSize + 1) {
+//         temp->left = insertNode(temp->left, val, rank);
+//         temp->left->parent = temp;
+//     }
+//     // Insert in the right subtree if rank > leftSubtreeSize + 1
+//     else {
+//         temp->right = insertNode(temp->right, val, rank - (leftSubtreeSize + 1));
+//         temp->right->parent = temp;
+//     }
+
+//     // Update the size and height after the insertion
+//     updateSize3(temp);
+//     setHeight2(temp);
+
+//     // Debug output
+//     cout << "Node value: " << temp->value << " | Left size: " << leftSubtreeSize << endl;
+
+//     // Rebalance the tree if it's unbalanced
+//     int balanceFactor = getBalanceFactor2(temp);
+//     if (balanceFactor > 1) {
+//         if (rank <= leftSubtreeSize + 1) {
+//             cout << "Performing left-left rotation." << endl;
+//             temp = leftLeftRotation(temp); // Left-Left case
+//         } else {
+//             cout << "Performing left-right rotation." << endl;
+//             temp = leftRightRotation(temp); // Left-Right case
+//         }
+//     }
+//     else if (balanceFactor < -1) {
+//         if (rank > leftSubtreeSize + 1) {
+//             cout << "Performing right-right rotation." << endl;
+//             temp = rightRightRotation(temp); // Right-Right case
+//         } else {
+//             cout << "Performing right-left rotation." << endl;
+//             temp = rightLeftRotation(temp); // Right-Left case
+//         }
+//     }
+
+//     return temp;
 // }
+
+
+
+
+
 
 
 /****************************************************************************
@@ -414,7 +637,119 @@ nodeptr rightLeftRotation(nodeptr &temp)
 /****************************************************************************
  *                    AVLTree deleteNode Helper Function                    *
  *****************************************************************************/
+// int getBalance(nodeptr node) {
+//     if (node == nullptr)
+//         return 0;  // If the node is null, the balance is 0 (tree is empty)
+    
+//     int leftHeight = (node->left != nullptr) ? node->left->height : -1;
+//     int rightHeight = (node->right != nullptr) ? node->right->height : -1;
 
+//     return leftHeight - rightHeight;  // Balance factor = height of left subtree - height of right subtree
+// }
+
+
+// int deleteNode(nodeptr &root, int val)
+// {
+//     if (root == nullptr) return -1;  // Tree is empty
+
+//     nodeptr temp = root;
+//     nodeptr parent = nullptr;
+
+//     //searching for the node to delete
+//     while (temp != nullptr && temp->value != val) {
+//         parent = temp;
+//         if (val < temp->value) {
+//             temp = temp->left;
+//         } else {
+//             temp = temp->right;
+//         }
+//     }
+
+//     //node not found
+//     if (temp == nullptr) {
+//         return -1;
+//     }
+
+//     //case 1: node has no children and is thus a leaf node
+//     if (temp->left == nullptr && temp->right == nullptr) {
+//         if (temp == root) {
+//             root = nullptr;  // If the node to delete is the root and it's a leaf
+//         } else if (parent->left == temp) {
+//             parent->left = nullptr;
+//         } else {
+//             parent->right = nullptr;
+//         }
+//         delete temp;
+//     }
+//     //case 2: node has only one child (left or right)
+//     else if (temp->left == nullptr || temp->right == nullptr) {
+//         nodeptr child = (temp->left != nullptr) ? temp->left : temp->right;
+//         if (temp == root) {
+//             root = child;  // If the node to delete is the root
+//         } else if (parent->left == temp) {
+//             parent->left = child;
+//         } else {
+//             parent->right = child;
+//         }
+//         delete temp;
+//     }
+//     //case 3: node has two children
+//     else {
+//         nodeptr successor = temp->left;  // Find the in-order predecessor (max node in left subtree)
+//         parent = temp;
+
+//         while (successor->right != nullptr) {
+//             parent = successor;
+//             successor = successor->right;
+//         }
+
+//         // Replace the value of temp with the successor's value
+//         temp->value = successor->value;
+
+//         // Now delete the successor node
+//         if (parent->left == successor) {
+//             parent->left = successor->left;  // The successor has no right child
+//         } else {
+//             parent->right = successor->left;  // The successor has no right child
+//         }
+
+//         delete successor;
+//     }
+
+//     //rebalancing the tree and updating heights after deletion
+//     while (root != nullptr) {
+//         setHeight(root);
+
+//         int balance = getBalance(root);  // Get the balance factor
+
+//         if (balance > 1) {
+//             if (getBalance(root->left) >= 0) {
+//                 // Perform right rotation
+//                 root = rightRightRotation(root);
+//             } else {
+//                 // Perform left-right rotation
+//                 root = leftRightRotation(root);
+//             }
+//         }
+//         else if (balance < -1) {
+//             if (getBalance(root->right) <= 0) {
+//                 // Perform left rotation
+//                 root = leftLeftRotation(root);
+//             } else {
+//                 // Perform right-left rotation
+//                 root = rightLeftRotation(root);
+//             }
+//         }
+
+//         root = root->parent;  //moving up the tree
+//     }
+
+//     return 1;  //node successfully deleted
+// }
+
+
+
+//given code
 int deleteNode(nodeptr &root, int val)
 {
     nodeptr temp = root;
@@ -580,6 +915,35 @@ void inOrderPrintByRank(nodeptr node, int& priorRank) {
     }
 }
 
+void inOrderPrintWithChildren(nodeptr node, int& priorRank) {
+    if (node != nullptr) {
+        inOrderPrintWithChildren(node->left, priorRank);
+
+        // Print current node
+        int currentRank = priorRank + 1;
+        cout << "Element: " << node->value << " | Rank: " << currentRank;
+
+        // Left child
+        if (node->left != nullptr) {
+            cout << " | Left Child: " << node->left->value;
+        } else {
+            cout << " | Left Child: None";
+        }
+
+        // Right child
+        if (node->right != nullptr) {
+            cout << " | Right Child: " << node->right->value;
+        } else {
+            cout << " | Right Child: None";
+        }
+
+        cout << endl;
+
+        priorRank = currentRank;
+
+        inOrderPrintWithChildren(node->right, priorRank);
+    }
+}
 
 
 /****************************************************************************
@@ -706,23 +1070,31 @@ nodeptr getNodeAtRank(nodeptr node, int rank) {
  *                                                                          *
  ****************************************************************************/
 
-// /****************************************************************************
-//  *                          AVLVector Constructor                           *
-//  ****************************************************************************/
-
-// AVLVector::AVLVector()
-// {
-
-// }
-
 /****************************************************************************
  *                           AVLVector Destructor                           *
  ****************************************************************************/
 
 AVLVector::~AVLVector()
 {
-
+    deleteSubtree(root);
 }
+
+/****************************************************************************
+ *             AVLVector Destructor Tree Deletion Helper Function           *
+ ****************************************************************************/
+
+void deleteSubtree(nodeptr node) {
+    if (node == nullptr) return;
+
+    //recursively deleting left and right children
+    deleteSubtree(node->left);
+    deleteSubtree(node->right);
+
+    //deleting the current node
+    delete node;
+}
+
+
 
 /****************************************************************************
  *                                                                          *
@@ -760,7 +1132,13 @@ void AVLVector::replaceAtRank(int r, int e)
 
 void AVLVector::insertAtRank(int r, int e)
 {
-    //root = insertNode(root, e, r);
+    nodeptr pointer = this->getRoot();
+    insertNode(pointer, e, r);
+    root = pointer;
+    // int result = insertNode(pointer, e, r);
+    // if (result != 1) {
+    //     cout << "Error, insert unsuccessful..." << endl;
+    // }
 }
 
 /****************************************************************************
@@ -794,6 +1172,7 @@ int AVLVector::rankOf(int e)
 void AVLVector::printAll()
 {
     int priorRank = 0;
-    inOrderPrintByRank(root, priorRank);
+    //inOrderPrintByRank(root, priorRank);
+    inOrderPrintWithChildren(root, priorRank);
     cout << endl;
 }
