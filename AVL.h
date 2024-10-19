@@ -29,21 +29,21 @@ using namespace std;
 //         Node(int val) : value(val), height(1), left(nullptr), right(nullptr), parent(nullptr) {}
 //     };
 
-//     typedef Node* nodeptr;
-//     nodeptr root = nullptr;
+//     typedef Node* Node*;
+//     Node* root = nullptr;
 
 //     //need to figure out which private member functions for AVL properities are needed
 //     //these are inspired by class notes
-//     void setHeight(nodeptr temp);
-//     int search(nodeptr &some, int val);
+//     void setHeight(Node* temp);
+//     int search(Node* &some, int val);
 
-//     void leftLeftRotation(nodeptr &temp);
-//     void rightRightRotation(nodeptr &temp);
-//     void leftRightRotation(nodeptr &temp);
-//     void rightLeftRotation(nodeptr &temp);
+//     void leftLeftRotation(Node* &temp);
+//     void rightRightRotation(Node* &temp);
+//     void leftRightRotation(Node* &temp);
+//     void rightLeftRotation(Node* &temp);
 
-//     int insertNode(nodeptr &root, int val);
-//     int deleteNode(nodeptr &root, int val);
+//     int insertNode(Node* &root, int val);
+//     int deleteNode(Node* &root, int val);
 
 
 //     public:
@@ -64,16 +64,17 @@ struct Node {
     int value;
     int height;
     int size;
+    int numLeft;
     Node* left;
     Node* right;
     Node* parent;
 
     //node constructor
-    Node(int val) : value(val), height(1), left(nullptr), right(nullptr), parent(nullptr) {}
+    Node(int val) : value(val), height(0), left(nullptr), right(nullptr), parent(nullptr) {}
 };
 
-    typedef Node* nodeptr;
-    extern nodeptr root;
+    // typedef Node* Node*;
+    // extern Node* root;
 
 
 
@@ -83,40 +84,40 @@ struct Node {
  *                                                                          *
  ****************************************************************************/
 
-void setHeight(nodeptr temp);
-int getHeight(nodeptr node);
-int search(nodeptr &some, int val);
-nodeptr leftLeftRotation(nodeptr &temp);
-nodeptr rightRightRotation(nodeptr &temp);
-nodeptr leftRightRotation(nodeptr &temp);
-nodeptr rightLeftRotation(nodeptr &temp);
-// nodeptr insertNode(nodeptr &root, int val, int rank);
-// int insertNode(nodeptr &root, int val);
-// nodeptr insertNode(nodeptr &root, int val, int rank);
-int deleteNode(nodeptr &root, int val);
-int getBalanceFactor (nodeptr node);
-void restoreBalance (nodeptr &node);
-void inOrderPrintByRank(nodeptr node);
-int findValueByRank(nodeptr root, int rank, int& currentRank); //testing this out to use with deleteNode function
+// void setHeight(Node* temp);
+// int getHeight(Node* node);
+// int search(Node* &some, int val);
+// Node* leftLeftRotation(Node* &temp);
+// Node* rightRightRotation(Node* &temp);
+// Node* leftRightRotation(Node* &temp);
+// Node* rightLeftRotation(Node* &temp);
+// // Node* insertNode(Node* &root, int val, int rank);
+// // int insertNode(Node* &root, int val);
+// // Node* insertNode(Node* &root, int val, int rank);
+// int deleteNode(Node* &root, int val);
+// int getBalanceFactor (Node* node);
+// void restoreBalance (Node* &node);
+// void inOrderPrintByRank(Node* node);
+// int findValueByRank(Node* root, int rank, int& currentRank); //testing this out to use with deleteNode function
 
-//helper function to count nodes in a subtree
-int countNodes(nodeptr node);
+// //helper function to count nodes in a subtree
+// int countNodes(Node* node);
 
-//currently disorganized helper functions added in for different function ideas
-int findRank(nodeptr node, int e, int rankOffset = 0);
-void updateSize(nodeptr node);
-int size(nodeptr node);
-int elementAtRankHelper(nodeptr node, int r, int& priorRank);
-int sizeOfSubtree(nodeptr node);
-void inOrderPrintByRank(nodeptr node, int& priorRank);
-nodeptr getNodeAtRank(nodeptr node, int rank);
-void updateSize3(nodeptr &node);
-int getBalanceFactor2(nodeptr &node);
-void setHeight2(nodeptr &node);
-void shiftRanks(nodeptr &node);
-int getBalance(nodeptr node);
-void deleteSubtree(nodeptr node);
-void inOrderPrintWithChildren(nodeptr node, int& priorRank);
+// //currently disorganized helper functions added in for different function ideas
+// int findRank(Node* node, int e, int rankOffset = 0);
+// void updateSize(Node* node);
+// int size(Node* node);
+// int elementAtRankHelper(Node* node, int r, int& priorRank);
+// int sizeOfSubtree(Node* node);
+// void inOrderPrintByRank(Node* node, int& priorRank);
+// Node* getNodeAtRank(Node* node, int rank);
+// void updateSize3(Node* &node);
+// int getBalanceFactor2(Node* &node);
+// void setHeight2(Node* &node);
+// void shiftRanks(Node* &node);
+// int getBalance(Node* node);
+// void deleteSubtree(Node* node);
+// void inOrderPrintWithChildren(Node* node, int& priorRank);
 
 
 /****************************************************************************
@@ -128,25 +129,30 @@ void inOrderPrintWithChildren(nodeptr node, int& priorRank);
 class AVLVector {
     private:
     // AVLTree tree;
-    nodeptr root;
+    Node* root;
 
     public:
     AVLVector() : root(nullptr) {}
     ~AVLVector();
+        Node* getRoot() {
+        return root;
+    }
 
     int elementAtRank(int r);
     void replaceAtRank(int r, int e);
     void insertAtRank(int r, int e);
-    void removeAtRank(int r);
+    int removeAtRank(int r);
     int rankOf(int e);
     void printAll();
 
-    int insertNode(nodeptr &root, int val, int rank);
+    void preorder(Node* root);
+    void inorder(Node* root);
+
+    // int insertNode(Node* &root, int val, int rank);
+    int insertNode(Node* &currentNode, int priorRank, int val, int rank) ;
 
 
-    nodeptr getRoot() {
-        return root;
-    }
+
 
     //testing!
     int getRootValue() const {
@@ -155,6 +161,50 @@ class AVLVector {
         }
         return -1; // Or some indication that the tree is empty
     }
+
+
+    void setHeight(Node* temp);
+    int getHeight(Node* node);
+    int search(Node* &some, int val);
+    Node* leftLeftRotation(Node* &temp);
+    Node* rightRightRotation(Node* &temp);
+    Node* leftRightRotation(Node* &temp);
+    Node* rightLeftRotation(Node* &temp);
+    // Node* insertNode(Node* &root, int val, int rank);
+    // int insertNode(Node* &root, int val);
+    // Node* insertNode(Node* &root, int val, int rank);
+    int deleteNode(Node* &root, int val);
+    int getBalanceFactor (Node* node);
+    void restoreBalance (Node* &node);
+    void inOrderPrintByRank(Node* node);
+    int findValueByRank(Node* root, int rank, int& currentRank); //testing this out to use with deleteNode function
+
+    //helper function to count nodes in a subtree
+    int countNodes(Node* node);
+
+    //currently disorganized helper functions added in for different function ideas
+    int findRank(Node* node, int e, int rankOffset = 0);
+    void updateSize(Node* node);
+    int size(Node* node);
+    int elementAtRankHelper(Node* node, int r, int& priorRank);
+    int sizeOfSubtree(Node* node);
+    void inOrderPrintByRank(Node* node, int& priorRank);
+    // Node* getNodeAtRank(Node* node, int rank);
+    Node* getNodeAtRank(Node* node, int rank, int priorRank = 0);
+    void updateSize3(Node* &node);
+    int getBalanceFactor2(Node* &node);
+    void setHeight2(Node* &node);
+    void shiftRanks(Node* &node);
+    int getBalance(Node* node);
+    void deleteSubtree(Node* node);
+    void inOrderPrintWithChildren(Node* node, int& priorRank);
+    void preOrderPrintWithChildren(Node* node, int priorRank);
+
+    int searchByRank(Node* &node, int val);
+    Node* findNodeByValue(Node* node, int value);
+
+    Node* deleteNodeByRank(Node* &node, int rank);
+    Node* findMax(Node* node);
 
 
 };
