@@ -71,6 +71,8 @@ struct Node {
 
     //node constructor
     Node(int val) : value(val), height(0), left(nullptr), right(nullptr), parent(nullptr) {}
+
+    int getRank(int priorRank) {return (priorRank + numLeft + 1);}
 };
 
     // typedef Node* Node*;
@@ -162,7 +164,6 @@ class AVLVector {
         return -1; // Or some indication that the tree is empty
     }
 
-
     void setHeight(Node* temp);
     int getHeight(Node* node);
     int search(Node* &some, int val);
@@ -173,7 +174,7 @@ class AVLVector {
     // Node* insertNode(Node* &root, int val, int rank);
     // int insertNode(Node* &root, int val);
     // Node* insertNode(Node* &root, int val, int rank);
-    int deleteNode(Node* &root, int val);
+    int deleteNode(Node* &root, int rank);
     int getBalanceFactor (Node* node);
     void restoreBalance (Node* &node);
     void inOrderPrintByRank(Node* node);
@@ -181,6 +182,7 @@ class AVLVector {
 
     //helper function to count nodes in a subtree
     int countNodes(Node* node);
+    bool deleteNodee(int rank);
 
     //currently disorganized helper functions added in for different function ideas
     int findRank(Node* node, int e, int rankOffset = 0);
@@ -195,7 +197,7 @@ class AVLVector {
     int getBalanceFactor2(Node* &node);
     void setHeight2(Node* &node);
     void shiftRanks(Node* &node);
-    int getBalance(Node* node);
+    // int getBalance(Node* node);
     void deleteSubtree(Node* node);
     void inOrderPrintWithChildren(Node* node, int& priorRank);
     void preOrderPrintWithChildren(Node* node, int priorRank);
@@ -204,9 +206,21 @@ class AVLVector {
     Node* findNodeByValue(Node* node, int value);
 
     Node* deleteNodeByRank(Node* &node, int rank);
+    Node* deleteNodeByRank2(Node* &node, int priorRank, int rank);
+
     Node* findMax(Node* node);
+    int deleteNode2(Node* &node, int priorRank, int rank);
+    void updateHeight(Node* nd);
+    int getBalance(Node* nd);
 
-
+    void balanceTreeAfterInsertion(Node* insertedNode);
+    Node* findMin(Node* node);
+    int deletion(Node* &root, int val);
+    Node* searchByRankAgain(Node *some, int rank, int priorRank = 0);
+    // void decrementNumLeft(Node* node);
+    void decrementNumLeft(Node* node);
+    // void decrementNumLeft(Node* node, Node* deletedNode);
+    bool isDescendant(Node* ancestor, Node* node);
 };
 
 
