@@ -537,31 +537,28 @@ int AVLVector::countNodes(Node *node)
 
 
 
-int AVLVector::findRank(Node *node, int e, int rankOffset)
+int AVLVector::findRank(Node *node, int e, int priorRank)
 {
-    if (!node)
+    if (!node) {
         return -1; // Element not found
-
-    // If the current node matches the element
-    if (node->value == e)
-    {
-        // Returning the rank, which is the count of nodes in the left subtree plus the rankOffset
-        return rankOffset + countNodes(node->left);
     }
 
-    // Searching in the left subtree if the element is smaller
-    if (e < node->value)
-    {
-        return findRank(node->left, e, rankOffset); // Pass rankOffset unchanged
+    // Traverse the left subtree first
+    int leftRank = findRank(node->left, e, priorRank);
+    if (leftRank != -1) {
+        return leftRank; // If found in left subtree, propagate the rank upwards
     }
-    else
-    {
-        // Searching in the right subtree if the element is larger
-        int leftCount = countNodes(node->left); // Count of nodes in the left subtree
-        // Include the leftCount and the current node's rank in rankOffset
-        int rightRank = findRank(node->right, e, rankOffset + leftCount + 1);
-        return rightRank; // Returning the rank found in the right subtree
+
+    // Increment the rank after visiting the left subtree
+    priorRank += node->numLeft + 1; // Add numLeft and 1 for the current node
+
+    // Check the current node
+    if (node->value == e) {
+        return priorRank; // Found the rank of the element
     }
+
+    // Continue searching in the right subtree
+    return findRank(node->right, e, priorRank);
 }
 
 void AVLVector::updateSize(Node *node)
@@ -894,14 +891,15 @@ int AVLVector::deleteNode(Node* &root, int rank) {
 //     return rank;
 // }
 int AVLVector::rankOf(int e)
-{
-    int result = findRank(root, e, 0); // Start with rankOffset of 0
+{   
+    int priorRank = 0;
+    int result = findRank(root, e, priorRank); // Start with rankOffset of 0
     if (result == -1)
     {
         cout << "Error: Element not found\n";
         return -1;
     }
-    return result + 1; // Adjust for 1-based rank
+    return result; // Adjust for 1-based rank 
 }
 
 /****************************************************************************
