@@ -121,10 +121,26 @@ int main () {
     cout << "current root is " << vect.getRoot()->value << endl;
     vect.printAll();
 
+    cout << endl;
+    cout << "testing rankOf function now! (extra credit)" << endl;
+
+    cout << vect.rankOf(1) << endl;
+    cout << vect.rankOf(2) << endl;
+    cout << vect.rankOf(3) << endl;
+    cout << vect.rankOf(7) << endl;
+    cout << vect.rankOf(8) << endl;
+    cout << vect.rankOf(10) << endl;
+    cout << vect.rankOf(16) << endl;
+    cout << vect.rankOf(17) << endl;
+    cout << vect.rankOf(18) << endl;
+    cout << endl;
+
+    cout << "done testing rankOf!\n\n" << endl;
 
     vect.inorder(vect.getRoot());
     cout << endl;
     vect.preorder(vect.getRoot());
+
 
 
     return 0;
