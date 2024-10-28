@@ -26,7 +26,7 @@ struct Node {
     Node* parent;
 
     //node constructor
-    Node(int val) : value(val), height(0), left(nullptr), right(nullptr), parent(nullptr) {}
+    Node(int val) : value(val), height(0), size(1), numLeft(0), left(nullptr), right(nullptr), parent(nullptr) {}
 
     int getRank(int priorRank) {return (priorRank + numLeft + 1);}
 };
@@ -41,19 +41,16 @@ struct Node {
 
 class AVLVector {
     private:
-    // AVLTree tree;
     Node* root;
 
     public:
     AVLVector() : root(nullptr) {}
     ~AVLVector();
     
-    Node* getRoot() {return root;}
-
     //AVLVector required functions
     int elementAtRank(int r);
-    void replaceAtRank(int r, int e);
-    void insertAtRank(int r, int e);
+    int replaceAtRank(int r, int e);
+    int insertAtRank(int r, int e);
     int removeAtRank(int r);
     int rankOf(int e);
     void printAll();
@@ -61,42 +58,37 @@ class AVLVector {
     //helper functions for testing
     void preorder(Node* root);
     void inorder(Node* root);
+    void inOrderPrintWithChildren(Node* node, int& priorRank);
 
+    //core helper functions
+    void setHeight(Node* node); //sets node height
+    int getBalance(Node* node); //gets balance factor
+    void updateSize(Node* &node); //updates node size and numLeft
+    int insertNode(Node* &currentNode, int priorRank, int val, int rank); //inserts nodes by rank, called in insertAtRank
+    Node* searchByRank(Node *some, int rank, int priorRank = 0); //finds the node to be deleted by inputted rank, called in deleteNode
+    void decrementNumLeft(Node* node); //calls updateSize to update size and numLeft, called in deleteNode
+    int deleteNode(Node* &root, int val); //deletes nodes by rank, called in removeAtRank
+    int findRank(Node* node, int e, int priorRank = 0); //finds rank of inputted element, called in rankOf
+    int elementAtRankHelper(Node* node, int r, int& priorRank); //finds element at inputted rank, called in elementAtRank
+    Node* getNodeAtRank(Node* node, int rank, int priorRank = 0); //gets the node at inputted rank, called in replaceAtRank
+    void inOrderPrintByRank(Node* node, int& priorRank); //prints tree (rank and elements in order of rank)
+    void deleteTree(Node* node); //destructor helper function for deleting entire tree
 
-    int insertNode(Node* &currentNode, int priorRank, int val, int rank);
-    int deleteNode(Node* &root, int val);
+    //rotations
+    Node* leftLeftRotation(Node* &temp);
+    Node* rightRightRotation(Node* &temp);
+    Node* leftRightRotation(Node* &temp);
+    Node* rightLeftRotation(Node* &temp);
 
-
+    //inline getter functions
+    Node* getRoot() {return root;}
+    int getHeight(Node* node) {return node->height;}
     int getRootValue() const {
         if (root != nullptr) {
             return root->value; 
         }
         return -1; 
     }
-
-    void setHeight(Node* temp);
-    int getHeight(Node* node) {return node->height;}
-    Node* leftLeftRotation(Node* &temp);
-    Node* rightRightRotation(Node* &temp);
-    Node* leftRightRotation(Node* &temp);
-    Node* rightLeftRotation(Node* &temp);
-    void inOrderPrintByRank(Node* node);
-    int countNodes(Node* node);
-
-    int findRank(Node* node, int e, int priorRank = 0);
-    int size(Node* node);
-    int elementAtRankHelper(Node* node, int r, int& priorRank);
-    void inOrderPrintByRank(Node* node, int& priorRank);
-    Node* getNodeAtRank(Node* node, int rank, int priorRank = 0);
-    void updateSize3(Node* &node);
-    void deleteSubtree(Node* node);
-    void inOrderPrintWithChildren(Node* node, int& priorRank);
-
-    void updateHeight(Node* node);
-    int getBalance(Node* node);
-
-    Node* searchByRankAgain(Node *some, int rank, int priorRank = 0);
-    void decrementNumLeft(Node* node);
 };
 
 

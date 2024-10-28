@@ -10,34 +10,80 @@
  *                      AVLTree setHeight Helper Function                   *
  ****************************************************************************/
 
-void AVLVector::setHeight(Node *temp)
+void AVLVector::setHeight(Node *node)
 {
-    int heightLeft, heightRight;
-    if (temp != NULL)
+    // Purpose: Set the height of a given node to 1 + the max of the heights of its left and right
+    //          subtrees. Primarily used after rotations were completed to update heights.
+    // Runtime: O(1)
+
+    if (node)
     {
-        setHeight(temp->left);
-        setHeight(temp->right);
-
-        if (temp->left != NULL)
+        if (!node->left && !node->right)
+            node->height = 0;
+        else if (!node->left)
+            node->height = getHeight(node->right) + 1;
+        else if (!node->right)
+            node->height = getHeight(node->left) + 1;
+        else if (node->left && node->right)
         {
-            heightLeft = temp->left->height; // getting the height of the left child
+            node->height = 1 + max(getHeight(node->left), getHeight(node->right));
         }
-        else
-        {
-            heightLeft = -1; // -1 for NULL children
-        }
-
-        if (temp->right != NULL)
-        {
-            heightRight = temp->right->height; // getting the height of the right child
-        }
-        else
-        {
-            heightRight = -1; // -1 for NULL children
-        }
-
-        temp->height = 1 + max(heightLeft, heightRight);
     }
+}
+
+
+
+/****************************************************************************
+ *                      AVLTree updateSize Helper Function                  *
+ ****************************************************************************/
+
+void AVLVector::updateSize(Node *&node)
+{
+    if (node == NULL)
+        return;
+    int leftSize = (node->left != NULL) ? node->left->size : 0;
+    int rightSize = (node->right != NULL) ? node->right->size : 0;
+    node->size = leftSize + rightSize + 1;
+    node->numLeft = leftSize; 
+    cout << "inside of updateSize, numLeft of " << node->value << " is: " << node->numLeft << endl;
+}
+
+
+
+/****************************************************************************
+ *                      AVLTree getBalance Helper Function                  *
+ ****************************************************************************/
+
+int AVLVector::getBalance(Node *node)
+{
+    // Purpose: return the net balance between the right and left subtrees of a node, where the right
+    //          subtree has a "negative" pull, and the left subtree has a "positive" pull.
+    // Runtime: O(1)
+
+    int leftHeight, rightHeight;
+    if (!node)
+    {
+        return 0;
+    }
+    if (!node->left && !node->right)
+        return 0;
+    if (!node->left)
+    {
+        leftHeight = -1;
+        rightHeight = getHeight(node->right);
+        return leftHeight - rightHeight;
+    }
+    if (!node->right)
+    {
+        rightHeight = -1;
+        leftHeight = getHeight(node->left);
+        return leftHeight - rightHeight;
+    }
+
+    leftHeight = getHeight(node->left);
+    rightHeight = getHeight(node->right);
+
+    return leftHeight - rightHeight;
 }
 
 
@@ -92,8 +138,8 @@ int AVLVector::insertNode(Node *&currentNode, int priorRank, int val, int rank)
     }
 
     // updating size and height after insertion
-    updateSize3(temp);
-    updateHeight(temp);
+    updateSize(temp);
+    setHeight(temp);
 
     // balancing the tree
     int balanceFactor = getBalance(temp);
@@ -131,77 +177,6 @@ int AVLVector::insertNode(Node *&currentNode, int priorRank, int val, int rank)
     currentNode = temp;
 
     return 1;
-}
-
-// helper function to update the size of a node
-void AVLVector::updateSize3(Node *&node)
-{
-    if (node == NULL)
-        return;
-    int leftSize = (node->left != NULL) ? node->left->size : 0;
-    int rightSize = (node->right != NULL) ? node->right->size : 0;
-    node->size = leftSize + rightSize + 1;
-    node->numLeft = leftSize; // adding in
-    cout << "inside of updateSize3, numLeft of " << node->value << " is: " << node->numLeft << endl;
-}
-
-
-
-int AVLVector::getBalance(Node *node)
-{
-    // Purpose: return the net balance between the right and left subtrees of a node, where the right
-    //          subtree has a "negative" pull, and the left subtree has a "positive" pull.
-    // Runtime: O(1)
-
-    int leftHeight, rightHeight;
-    if (!node)
-    {
-        return 0;
-    }
-    if (!node->left && !node->right)
-        return 0;
-    if (!node->left)
-    {
-        leftHeight = -1;
-        rightHeight = getHeight(node->right);
-        return leftHeight - rightHeight;
-    }
-    if (!node->right)
-    {
-        rightHeight = -1;
-        leftHeight = getHeight(node->left);
-        return leftHeight - rightHeight;
-    }
-
-    leftHeight = getHeight(node->left);
-    rightHeight = getHeight(node->right);
-
-    return leftHeight - rightHeight;
-}
-
-/***************************************************************************************************
- *************************************** updateHeight method ***************************************
- ***************************************************************************************************/
-
-void AVLVector::updateHeight(Node *node)
-{
-    // Purpose: Set the height of a given node to 1 + the max of the heights of its left and right
-    //          subtrees. Primarily used after rotations were completed to update heights.
-    // Runtime: O(1)
-
-    if (node)
-    {
-        if (!node->left && !node->right)
-            node->height = 0;
-        else if (!node->left)
-            node->height = getHeight(node->right) + 1;
-        else if (!node->right)
-            node->height = getHeight(node->left) + 1;
-        else if (node->left && node->right)
-        {
-            node->height = 1 + max(getHeight(node->left), getHeight(node->right));
-        }
-    }
 }
 
 
@@ -242,10 +217,10 @@ Node *AVLVector::leftLeftRotation(Node *&temp)
     }
 
     // updating height and size
-    updateSize3(temp);   // updating size for temp (original root)
-    updateSize3(temp1);  // updating size for new root temp1
-    updateHeight(temp);  // updating height for temp
-    updateHeight(temp1); // updating height for temp1
+    updateSize(temp);   // updating size for temp (original root)
+    updateSize(temp1);  // updating size for new root temp1
+    setHeight(temp);  // updating height for temp
+    setHeight(temp1); // updating height for temp1
 
     // temp=temp1;
 
@@ -290,10 +265,10 @@ Node *AVLVector::rightRightRotation(Node *&temp)
     }
 
     // updating height and size
-    updateSize3(temp);   // updating size for temp (original root)
-    updateSize3(temp1);  // updating size for new root temp1
-    updateHeight(temp);  // updating height for temp
-    updateHeight(temp1); // updating height for temp1
+    updateSize(temp);   // updating size for temp (original root)
+    updateSize(temp1);  // updating size for new root temp1
+    setHeight(temp);  // updating height for temp
+    setHeight(temp1); // updating height for temp1
 
     // temp = temp1;
 
@@ -345,12 +320,12 @@ Node *AVLVector::leftRightRotation(Node *&temp)
     temp->numLeft = (temp->left != NULL) ? temp->left->size : 0;
 
     // updating height and size
-    updateSize3(temp);   // updating size for temp (original root)
-    updateSize3(temp1);  // updating size for temp1
-    updateSize3(temp2);  // updating size for new root temp2
-    updateHeight(temp);  // updating height for temp
-    updateHeight(temp1); // updating height for temp1
-    updateHeight(temp2); // updating height for temp2
+    updateSize(temp);   // updating size for temp (original root)
+    updateSize(temp1);  // updating size for temp1
+    updateSize(temp2);  // updating size for new root temp2
+    setHeight(temp);  // updating height for temp
+    setHeight(temp1); // updating height for temp1
+    setHeight(temp2); // updating height for temp2
 
     // WAS MISSING THIS CHECK IF I NEED IT, would need it if it was void i think.
     //  temp = temp2;
@@ -403,23 +378,149 @@ Node *AVLVector::rightLeftRotation(Node *&temp)
     temp->numLeft = (temp->left != NULL) ? temp->left->size : 0;
 
     // updating height and size
-    updateSize3(temp);   // updating size for temp (original root)
-    updateSize3(temp1);  // updating size for temp1
-    updateSize3(temp2);  // updating size for new root temp2
-    updateHeight(temp);  // updating height for temp
-    updateHeight(temp1); // updating height for temp1
-    updateHeight(temp2); // updating height for temp2
+    updateSize(temp);   // updating size for temp (original root)
+    updateSize(temp1);  // updating size for temp1
+    updateSize(temp2);  // updating size for new root temp2
+    setHeight(temp);  // updating height for temp
+    setHeight(temp1); // updating height for temp1
+    setHeight(temp2); // updating height for temp2
 
     return temp2;
 }
 
 
 
+
+/****************************************************************************
+ *                AVLTree decrementNumLeft Helper Function                  *
+ ****************************************************************************/
+
+void AVLVector::decrementNumLeft(Node* node) {
+    // Traverse up to the root, decrementing numLeft for each node that has the current node in its left subtree (using updateSize function)
+    while (node != NULL) {
+        updateSize(node);
+        node = node->parent;
+    }
+}
+
+/****************************************************************************
+ *                    AVLTree searchByRank Helper Function                  *
+ ****************************************************************************/
+
+Node* AVLVector::searchByRank(Node *some, int rank, int priorRank) {
+    if (some == NULL) {
+        return NULL; // Rank not found
+    }
+
+    while (some != NULL) {
+        int currentRank = priorRank + some->numLeft + 1; // using numLeft to calculate current rank
+
+        //debugging statement to observe rank calculation
+        cout << "Visiting node with value " << some->value << ", currentRank: " << currentRank << ", priorRank: " << priorRank << endl;
+
+        if (currentRank == rank) {
+            return some; //returning the node at the given rank
+        } 
+        else if (rank < currentRank) {
+            //moving to the left subtree, no need to update priorRank here
+            some = some->left;
+        } 
+        else {
+            //moving to the right subtree, need to update priorRank
+            priorRank = currentRank;
+            some = some->right;
+        }
+    }
+
+    return NULL; //rank not found!!!
+}
+
+
+
 /****************************************************************************
  *                    AVLTree deleteNode Helper Function                    *
- *****************************************************************************/
+ ****************************************************************************/
 
+int AVLVector::deleteNode(Node* &root, int rank) {
+    Node* temp = searchByRank(root, rank); //getting the node at the given rank
+    if (temp == NULL) {
+        return -1; //node at rank not found
+    }
 
+    //debugging statement
+    cout << "temp (node to be deleted) is currently: " << temp->value << endl;
+
+    Node* temp1;
+    if (temp->left == NULL) { //empty left subtree!
+        if (temp == root) {
+            root = root->right;
+            if (root != NULL) root->parent = NULL;
+        } else {
+            temp1 = temp->parent;
+            //debugging statement
+            cout << "temp1 (parent of node to be deleted) is currently: " << temp1->value << endl;
+            if (temp1->left == temp) {
+                temp1->left = temp->right;
+            } else
+                temp1->right = temp->right;
+            if (temp->right != NULL) temp->right->parent = temp1; 
+            delete temp;
+            setHeight(temp1);
+            temp = temp1;
+        }
+    } else { //temp->left not NULL
+        temp1 = temp->left;
+        while (temp1->right != NULL)
+            temp1 = temp1->right;
+        //debugging statement
+        cout << "temp1 (rightmost node in node to be deleted's left subtree—replacement value) is currently: " << temp1->value << endl;
+        temp->value = temp1->value; // Copy value from predecessor
+        temp = temp1->parent; 
+        if (temp->left == temp1) {
+            temp->left = temp1->left;
+        } else
+            temp->right = temp1->left;
+        if (temp1->left != NULL) temp1->left->parent = temp; 
+        setHeight(temp);
+        delete temp1;
+    }
+
+    decrementNumLeft(temp);
+
+    // Rebalance the tree and adjust heights
+    while (temp != NULL) {
+        if (temp->height >= 2) {
+            if (temp->left == NULL) {
+                if (temp->right->right == NULL)
+                    rightLeftRotation(temp);
+                else
+                    rightRightRotation(temp);
+            }
+            else if (temp->right == NULL) {
+                if (temp->left->left == NULL)
+                    leftRightRotation(temp);
+                else
+                    leftLeftRotation(temp);
+            }
+            else if (temp->left->height - temp->right->height > 1) {
+                if (temp->left->left->height >= temp->left->right->height)
+                    leftLeftRotation(temp);
+                else
+                    leftRightRotation(temp);
+            }
+            else if (temp->right->height - temp->left->height > 1) {
+                if (temp->right->right->height >= temp->right->left->height)
+                    rightRightRotation(temp);
+                else
+                    rightLeftRotation(temp);
+            }
+        }
+        temp = temp->parent;
+        setHeight(temp);
+    }
+
+    return 1; //successfully deleted
+}
 
 
 
@@ -512,17 +613,8 @@ void AVLVector::inOrderPrintWithChildren(Node *node, int &priorRank)
 
 
 /****************************************************************************
- *                 AVLTree findValueByRank Helper Function                  *
+ *                 AVLTree findRank Helper Function                  *
  ****************************************************************************/
-
-// helper function to count nodes in a subtree
-int AVLVector::countNodes(Node *node)
-{
-    if (!node)
-        return 0;
-    return 1 + countNodes(node->left) + countNodes(node->right);
-}
-
 
 
 int AVLVector::findRank(Node *node, int e, int priorRank)
@@ -551,14 +643,9 @@ int AVLVector::findRank(Node *node, int e, int priorRank)
 
 
 
-int AVLVector::size(Node *node)
-{
-    if (!node)
-        return 0;                                    // Base case: no nodes
-    return 1 + size(node->left) + size(node->right); // Count the current node plus left and right subtrees
-}
-
-
+/****************************************************************************
+ *                 AVLTree elementAtRankHelper Helper Function              *
+ ****************************************************************************/
 
 int AVLVector::elementAtRankHelper(Node *node, int r, int &priorRank)
 {
@@ -590,12 +677,18 @@ int AVLVector::elementAtRankHelper(Node *node, int r, int &priorRank)
 }
 
 
+
+/****************************************************************************
+ *                 AVLTree getNodeAtRank Helper Function              *
+ ****************************************************************************/
+
 Node *AVLVector::getNodeAtRank(Node *node, int rank, int priorRank)
 {
     // base case of whether node is not found
     if (!node)
     {
-        return nullptr;
+        cout << "Node not found!" << endl;
+        return NULL;
     }
 
     // int leftSize = size(node->left);            // getting size of left subtree
@@ -618,6 +711,8 @@ Node *AVLVector::getNodeAtRank(Node *node, int rank, int priorRank)
     }
 }
 
+
+
 /****************************************************************************
  *                                                                          *
  *                 class AVLVector Constructors & Destructor                *
@@ -630,21 +725,21 @@ Node *AVLVector::getNodeAtRank(Node *node, int rank, int priorRank)
 
 AVLVector::~AVLVector()
 {
-    deleteSubtree(root);
+    deleteTree(root);
 }
 
 /****************************************************************************
  *             AVLVector Destructor Tree Deletion Helper Function           *
  ****************************************************************************/
 
-void AVLVector::deleteSubtree(Node *node)
+void AVLVector::deleteTree(Node *node)
 {
     if (node == nullptr)
         return;
 
     // recursively deleting left and right children
-    deleteSubtree(node->left);
-    deleteSubtree(node->right);
+    deleteTree(node->left);
+    deleteTree(node->right);
 
     // deleting the current node
     delete node;
@@ -663,12 +758,14 @@ void AVLVector::deleteSubtree(Node *node)
 int AVLVector::elementAtRank(int r)
 {
     if (root == nullptr) {
-        throw out_of_range("Tree is empty, cannot access any elements!");
+        cout << "Tree is empty, cannot access any elements!\n" << endl;
+        return -1;
     }
 
     if (r <= 0 || r > root->size)
     {
-        throw out_of_range("Rank is out of bounds");
+        cout << "Rank is out of bounds!\n" << endl;
+        return -1;
     }
 
     int priorRank = 0;
@@ -679,25 +776,29 @@ int AVLVector::elementAtRank(int r)
  *                     AVLVector replaceAtRank Function                     *
  ****************************************************************************/
 
-void AVLVector::replaceAtRank(int r, int e)
+int AVLVector::replaceAtRank(int r, int e)
 {
     if (root == nullptr) {
-        throw out_of_range("Tree is empty, cannot replace any elements!");
+        cout << "Tree is empty, cannot replace any elements!\n" << endl;
+        return -1;
     }
 
     if (r <= 0 || r > root->size) //added in
     {
-        throw out_of_range("Rank is out of bounds");
+        cout << "Rank is out of bounds!\n" << endl;
+        return -1;
     }
 
     Node *node = getNodeAtRank(root, r);
     if (node)
     {
-        node->value = e; //replacing the value
+        node->value = e; //replacing the value with e
+        return 1;
     }
     else
     {
-        throw runtime_error("Node at rank not found");
+        cout << "Node at rank not found!" << endl;
+        return -1;
     }
 }
 
@@ -705,12 +806,15 @@ void AVLVector::replaceAtRank(int r, int e)
  *                     AVLVector insertAtRank Function                      *
  **************************************************************************x*/
 
-void AVLVector::insertAtRank(int r, int e)
+int AVLVector::insertAtRank(int r, int e)
 {
-    if (r <= 0 || (root != nullptr && r > root->size + 1)) // +1 to account for insertion at the end
+    if ((root == nullptr && r != 1) || r <= 0 || (root != nullptr && r > root->size + 1)) // +1 to account for insertion at the end
     {
-        throw out_of_range("Rank is out of bounds");
+        cout << "Rank is out of bounds!\n" << endl;
+        return -1;
     }
+
+    int result;
 
     if (root == NULL)
     {
@@ -727,8 +831,10 @@ void AVLVector::insertAtRank(int r, int e)
     else
     {
         int priorRank = 0;
-        insertNode(root, priorRank, e, r);
+        result = insertNode(root, priorRank, e, r);
     }
+
+    return result; //returning the result of insertion (1 on success, -1 on failure)
 }
 
 /****************************************************************************
@@ -737,12 +843,14 @@ void AVLVector::insertAtRank(int r, int e)
 
 int AVLVector::removeAtRank(int r) {
     if (root == nullptr) {
-        throw out_of_range("Tree is empty, cannot remove any elements!");
+        cout << "Tree is empty, cannot remove any elements!\n" << endl;
+        return -1;
     }
 
     if (r <= 0 || (root != nullptr && r > root->size)) 
     {
-        throw out_of_range("Rank is out of bounds");
+        cout << "Rank is out of bounds!\n" << endl;
+        return -1;
     }
 
     int result = deleteNode(root, r); 
@@ -756,154 +864,23 @@ int AVLVector::removeAtRank(int r) {
 
 
 
-void AVLVector::decrementNumLeft(Node* node) {
-    // Traverse up to the root, decrementing numLeft for each node that has the current node in its left subtree (using updateSize3 function)
-    while (node != NULL) {
-        updateSize3(node);
-        node = node->parent;
-    }
-}
-
-
-
-Node* AVLVector::searchByRankAgain(Node *some, int rank, int priorRank) {
-    if (some == NULL) {
-        return NULL; // Rank not found
-    }
-
-    while (some != NULL) {
-        int currentRank = priorRank + some->numLeft + 1; // using numLeft to calculate current rank
-
-        //debugging statement to observe rank calculation
-        cout << "Visiting node with value " << some->value << ", currentRank: " << currentRank << ", priorRank: " << priorRank << endl;
-
-        if (currentRank == rank) {
-            return some; //returning the node at the given rank
-        } 
-        else if (rank < currentRank) {
-            //moving to the left subtree, no need to update priorRank here
-            some = some->left;
-        } 
-        else {
-            //moving to the right subtree, need to update priorRank
-            priorRank = currentRank;
-            some = some->right;
-        }
-    }
-
-    return NULL; //rank not found!!!
-}
-
-
-
-int AVLVector::deleteNode(Node* &root, int rank) {
-    Node* temp = searchByRankAgain(root, rank); //getting the node at the given rank
-    if (temp == NULL) {
-        return -1; //node at rank not found
-    }
-
-    //debugging statement
-    cout << "temp (node to be deleted) is currently: " << temp->value << endl;
-
-    Node* temp1;
-    if (temp->left == NULL) { //empty left subtree!
-        if (temp == root) {
-            root = root->right;
-            if (root != NULL) root->parent = NULL;
-        } else {
-            temp1 = temp->parent;
-            //debugging statement
-            cout << "temp1 (parent of node to be deleted) is currently: " << temp1->value << endl;
-            if (temp1->left == temp) {
-                temp1->left = temp->right;
-            } else
-                temp1->right = temp->right;
-            if (temp->right != NULL) temp->right->parent = temp1; 
-            delete temp;
-            updateHeight(temp1);
-            temp = temp1;
-        }
-    } else { //temp->left not NULL
-        temp1 = temp->left;
-        while (temp1->right != NULL)
-            temp1 = temp1->right;
-        //debugging statement
-        cout << "temp1 (rightmost node in node to be deleted's left subtree—replacement value) is currently: " << temp1->value << endl;
-        temp->value = temp1->value; // Copy value from predecessor
-        temp = temp1->parent; 
-        if (temp->left == temp1) {
-            temp->left = temp1->left;
-        } else
-            temp->right = temp1->left;
-        if (temp1->left != NULL) temp1->left->parent = temp; 
-        updateHeight(temp);
-        delete temp1;
-    }
-
-    decrementNumLeft(temp);
-
-    // Rebalance the tree and adjust heights
-    while (temp != NULL) {
-        if (temp->height >= 2) {
-            if (temp->left == NULL) {
-                if (temp->right->right == NULL)
-                    rightLeftRotation(temp);
-                else
-                    rightRightRotation(temp);
-            }
-            else if (temp->right == NULL) {
-                if (temp->left->left == NULL)
-                    leftRightRotation(temp);
-                else
-                    leftLeftRotation(temp);
-            }
-            else if (temp->left->height - temp->right->height > 1) {
-                if (temp->left->left->height >= temp->left->right->height)
-                    leftLeftRotation(temp);
-                else
-                    leftRightRotation(temp);
-            }
-            else if (temp->right->height - temp->left->height > 1) {
-                if (temp->right->right->height >= temp->right->left->height)
-                    rightRightRotation(temp);
-                else
-                    rightLeftRotation(temp);
-            }
-        }
-        temp = temp->parent;
-        updateHeight(temp);
-    }
-
-    return 1; // Successfully deleted
-}
-
-
-
 /****************************************************************************
  *                   Extra Credit: AVLVector rankOf Function                *
  ****************************************************************************/
 
-// int AVLVector::rankOf(int e)
-// {
-//     int result = findRank(root, e);
-//     if (result == -1) {
-//         cout << "Error: Element not found\n";
-//         return -1;
-//     }
-//     int rank = result + 1;
-//     return rank;
-// }
 int AVLVector::rankOf(int e)
 {   
     int priorRank = 0;
     int result = findRank(root, e, priorRank); // Start with rankOffset of 0
     if (result == -1)
     {
-        cout << "Error: Element not found\n";
+        cout << "Error: Element not found!" << endl;
         return -1;
     }
-    return result; // Adjust for 1-based rank 
+    return result; 
 }
+
+
 
 /****************************************************************************
  *                        AVLVector printAll Function                       *
