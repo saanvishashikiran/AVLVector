@@ -84,13 +84,11 @@ class AVLVector {
     int countNodes(Node* node);
 
     int findRank(Node* node, int e, int priorRank = 0);
-    void updateSize(Node* node);
     int size(Node* node);
     int elementAtRankHelper(Node* node, int r, int& priorRank);
     void inOrderPrintByRank(Node* node, int& priorRank);
     Node* getNodeAtRank(Node* node, int rank, int priorRank = 0);
     void updateSize3(Node* &node);
-    void shiftRanks(Node* &node);
     void deleteSubtree(Node* node);
     void inOrderPrintWithChildren(Node* node, int& priorRank);
 

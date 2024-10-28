@@ -72,7 +72,8 @@ int AVLVector::insertNode(Node *&currentNode, int priorRank, int val, int rank)
         // If inserting at a rank that collides, shift ranks of all subsequent nodes
         if (rank == temp->numLeft + 1)
         {
-            shiftRanks(temp->right); // shifting nodes in the right subtree
+            // shiftRanks(temp->right); // shifting nodes in the right subtree
+            temp->numLeft += 1; //replacing shiftRanks with this to fix runtime...
         }
         // Insert into the left subtree
         int result = insertNode(temp->left, priorRank, val, rank);
@@ -203,20 +204,7 @@ void AVLVector::updateHeight(Node *node)
     }
 }
 
-// helper function for shifting ranks of nodes in the right subtree
-void AVLVector::shiftRanks(Node *&node)
-{
-    if (node == NULL)
-        return;
 
-    Node *temp = node;
-    // Perform rank shift on the current node
-    while (temp != NULL)
-    {
-        updateSize(temp);   // Update the size of the current node
-        temp = temp->right; // Shift to the next node in the right subtree
-    }
-}
 
 /****************************************************************************
  *                  AVLTree leftLeftRotation Helper Function                *
@@ -561,13 +549,7 @@ int AVLVector::findRank(Node *node, int e, int priorRank)
     return findRank(node->right, e, priorRank);
 }
 
-void AVLVector::updateSize(Node *node)
-{
-    if (node != nullptr)
-    {
-        node->size = 1 + size(node->left) + size(node->right);
-    }
-}
+
 
 int AVLVector::size(Node *node)
 {
@@ -576,11 +558,13 @@ int AVLVector::size(Node *node)
     return 1 + size(node->left) + size(node->right); // Count the current node plus left and right subtrees
 }
 
+
+
 int AVLVector::elementAtRankHelper(Node *node, int r, int &priorRank)
 {
-    if (node == nullptr)
+    if (node == NULL)
     {
-        return -1; // returning -1 if rank is out of bounds
+        return -1;
     }
 
     // traversing the left subtree first
@@ -614,8 +598,8 @@ Node *AVLVector::getNodeAtRank(Node *node, int rank, int priorRank)
         return nullptr;
     }
 
-    int leftSize = size(node->left);            // getting size of left subtree
-    int currentRank = leftSize + priorRank + 1; // calculating rank using rank formula from class
+    // int leftSize = size(node->left);            // getting size of left subtree
+    int currentRank = node->numLeft + priorRank + 1; // calculating rank using rank formula from class
 
     if (rank == currentRank)
     {
@@ -678,6 +662,15 @@ void AVLVector::deleteSubtree(Node *node)
 
 int AVLVector::elementAtRank(int r)
 {
+    if (root == nullptr) {
+        throw out_of_range("Tree is empty, cannot access any elements!");
+    }
+
+    if (r <= 0 || r > root->size)
+    {
+        throw out_of_range("Rank is out of bounds");
+    }
+
     int priorRank = 0;
     return elementAtRankHelper(root, r, priorRank);
 }
@@ -688,7 +681,11 @@ int AVLVector::elementAtRank(int r)
 
 void AVLVector::replaceAtRank(int r, int e)
 {
-    if (r <= 0 || r > size(root))
+    if (root == nullptr) {
+        throw out_of_range("Tree is empty, cannot replace any elements!");
+    }
+
+    if (r <= 0 || r > root->size) //added in
     {
         throw out_of_range("Rank is out of bounds");
     }
@@ -696,7 +693,7 @@ void AVLVector::replaceAtRank(int r, int e)
     Node *node = getNodeAtRank(root, r);
     if (node)
     {
-        node->value = e; // Replace the value
+        node->value = e; //replacing the value
     }
     else
     {
@@ -710,6 +707,11 @@ void AVLVector::replaceAtRank(int r, int e)
 
 void AVLVector::insertAtRank(int r, int e)
 {
+    if (r <= 0 || (root != nullptr && r > root->size + 1)) // +1 to account for insertion at the end
+    {
+        throw out_of_range("Rank is out of bounds");
+    }
+
     if (root == NULL)
     {
         // manual insert
@@ -727,11 +729,6 @@ void AVLVector::insertAtRank(int r, int e)
         int priorRank = 0;
         insertNode(root, priorRank, e, r);
     }
-
-    // int result = insertNode(pointer, e, r);
-    // if (result != 1) {
-    //     cout << "Error, insert unsuccessful..." << endl;
-    // }
 }
 
 /****************************************************************************
@@ -739,16 +736,22 @@ void AVLVector::insertAtRank(int r, int e)
  ****************************************************************************/
 
 int AVLVector::removeAtRank(int r) {
-    if (r < 1 || r > size(root)) return -1; // Invalid rank
-
-    // Call the deletion function to remove the node at rank r
-    int result = deleteNode(root, r); // deletion returns 1 on success, -1 on failure
-
-    if (root != NULL) {
-        root->parent = NULL;  // Ensure the root's parent is always NULL
+    if (root == nullptr) {
+        throw out_of_range("Tree is empty, cannot remove any elements!");
     }
 
-    return result; // Return the result of deletion (1 on success, -1 on failure)
+    if (r <= 0 || (root != nullptr && r > root->size)) 
+    {
+        throw out_of_range("Rank is out of bounds");
+    }
+
+    int result = deleteNode(root, r); 
+
+    if (root != NULL) {
+        root->parent = NULL;  //ensuring the root's parent is always NULL
+    }
+
+    return result; //returning the result of deletion (1 on success, -1 on failure)
 }
 
 

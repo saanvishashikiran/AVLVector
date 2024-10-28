@@ -121,22 +121,6 @@ int main () {
     // cout << "current root is " << vect.getRoot()->value << endl;
     // vect.printAll();
 
-    // cout << endl;
-    // cout << "testing rankOf function now! (extra credit)" << endl;
-
-    // cout << vect.rankOf(1) << endl;
-    // cout << vect.rankOf(2) << endl;
-    // cout << vect.rankOf(3) << endl;
-    // cout << vect.rankOf(7) << endl;
-    // cout << vect.rankOf(8) << endl;
-    // cout << vect.rankOf(10) << endl;
-    // cout << vect.rankOf(16) << endl;
-    // cout << vect.rankOf(17) << endl;
-    // cout << vect.rankOf(18) << endl;
-    // cout << endl;
-
-    // cout << "done testing rankOf!\n\n" << endl;
-
     // vect.inorder(vect.getRoot());
     // cout << endl;
     // vect.preorder(vect.getRoot());
@@ -172,21 +156,25 @@ int main () {
         if (operation == "INSERT") {
             int rank, element;
             if (input >> rank >> element) {
-                avlTree.insertAtRank(rank, element);
-                //Node* ptr = avlTree.getRoot();
-                //avlTree.insertNode(ptr, element, rank);
-                avlTree.printAll();
-                cout << endl;
-                avlTree.inorder(avlTree.getRoot());
-                cout << endl;
-                avlTree.preorder(avlTree.getRoot());
-                int rootValue = avlTree.getRootValue();
-                if (rootValue != -1) {
-                    cout << "Root of the AVL Tree: " << rootValue << endl;
-                } else {
-                    cout << "The AVL Tree is empty." << endl;
+
+                try {
+                    avlTree.insertAtRank(rank, element);
+                    avlTree.printAll();
+                    cout << endl;
+                    avlTree.inorder(avlTree.getRoot());
+                    cout << endl;
+                    avlTree.preorder(avlTree.getRoot());
+                    int rootValue = avlTree.getRootValue();
+                    if (rootValue != -1) {
+                        cout << "Root of the AVL Tree: " << rootValue << endl;
+                    } else {
+                        cout << "The AVL Tree is empty." << endl;
+                    }
+                    cout << "Just inserted " << element << " (given element) at " << rank << " (given rank)!\n" << endl;
+                } catch (const std::out_of_range& e) {
+                    cout << "Error: " << e.what() << endl;
+                    cout << endl;
                 }
-                cout << "Just inserted " << element << " (given element) at " << rank << " (given rank)!\n" << endl;
             } else {
                 cout << "Invalid input——the proper format is INSERT <int> <int>!" << endl;
             }
@@ -199,36 +187,34 @@ int main () {
         } else if (operation == "DELETE") {
             int rank;
             if (input >> rank) {
-                int priorRank = 0; //initializing rank tracker
-                cout << "Deleting element at rank " << rank << endl;
-                avlTree.removeAtRank(rank);
-
-                cout << "TESTING, PRINTING UPDATED TREE" << endl;
-                avlTree.printAll();
-                cout << endl;
-                avlTree.inorder(avlTree.getRoot());
-                cout << endl;
-                avlTree.preorder(avlTree.getRoot());
-
-                // int elementAtRank = avlTree.elementAtRank(rank);
-                
-                // if (elementAtRank == -1) {
-                //     cout << "Error: No element found at rank " << rank << endl; 
-                //     cout << "\n";
-                // } else {
-                //     cout << "Deleting element: " << elementAtRank << " at rank " << rank << endl;
-                //     avlTree.deleteNode(root, elementAtRank); //deleting the node by value
-                //     cout << "\n";
-                // }
+                try{
+                    int priorRank = 0; //initializing rank tracker
+                    avlTree.removeAtRank(rank);
+                    cout << "Deleting element at rank " << rank << endl;
+                    cout << "TESTING, PRINTING UPDATED TREE" << endl;
+                    avlTree.printAll();
+                    cout << endl;
+                    avlTree.inorder(avlTree.getRoot());
+                    cout << endl;
+                    avlTree.preorder(avlTree.getRoot());
+                } catch (const std::out_of_range& e) {
+                    cout << "Error: " << e.what() << endl;
+                    cout << endl;
+                }
             } else {
                 cout << "Invalid input——the proper format is DELETE <int>!" << endl;
             }
         } else if (operation == "REPLACE") {
             int rank, element;
             if (input >> rank >> element) {
-                avlTree.replaceAtRank(rank, element);
-                cout << "Just replaced the element at rank " << rank << " with " << element << "!" << endl;
-                avlTree.printAll();
+                try {
+                    avlTree.replaceAtRank(rank, element);
+                    cout << "Just replaced the element at rank " << rank << " with " << element << "!" << endl;
+                    avlTree.printAll();
+                } catch (const std::out_of_range& e) {
+                    cout << "Error: " << e.what() << endl;
+                    cout << endl;
+                }
             } else {
                 cout << "Invalid input——the proper format is REPLACE <int> <int>!" << endl;
             }
@@ -236,7 +222,12 @@ int main () {
         } else if (operation == "ELEMENT-AT") {
             int rank;
             if (input >> rank) {
-                avlTree.elementAtRank(rank);
+                try {
+                    avlTree.elementAtRank(rank);
+                } catch (const std::out_of_range& e) {
+                    cout << "Error: " << e.what() << endl;
+                    cout << endl;
+                }
             } else {
                 cout << "Invalid input——the proper format is ELEMENT-AT <int>!" << endl;
             }
