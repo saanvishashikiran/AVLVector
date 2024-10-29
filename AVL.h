@@ -43,23 +43,6 @@ class AVLVector {
     private:
     Node* root;
 
-    public:
-    AVLVector() : root(nullptr) {}
-    ~AVLVector();
-    
-    //AVLVector required functions
-    int elementAtRank(int r);
-    int replaceAtRank(int r, int e);
-    int insertAtRank(int r, int e);
-    int removeAtRank(int r);
-    int rankOf(int e);
-    void printAll();
-
-    //helper functions for testing
-    void preorder(Node* root);
-    void inorder(Node* root);
-    void inOrderPrintWithChildren(Node* node, int& priorRank);
-
     //core helper functions
     void setHeight(Node* node); //sets node height
     int getBalance(Node* node); //gets balance factor
@@ -79,6 +62,25 @@ class AVLVector {
     Node* rightRightRotation(Node* &temp);
     Node* leftRightRotation(Node* &temp);
     Node* rightLeftRotation(Node* &temp);
+    
+    //testing print function
+    void inOrderPrintWithChildren(Node* node, int& priorRank);
+
+    public:
+    AVLVector() : root(nullptr) {} //constructor
+    ~AVLVector(); //destructor
+    
+    //AVLVector required functions
+    int elementAtRank(int r);
+    int replaceAtRank(int r, int e);
+    int insertAtRank(int r, int e);
+    int removeAtRank(int r);
+    int rankOf(int e);
+    void printAll();
+
+    //helper functions for testing
+    void preorder(Node* root);
+    void inorder(Node* root);
 
     //inline getter functions
     Node* getRoot() {return root;}
