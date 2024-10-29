@@ -27,8 +27,6 @@ struct Node {
 
     //node constructor
     Node(int val) : value(val), height(0), size(1), numLeft(0), left(nullptr), right(nullptr), parent(nullptr) {}
-
-    int getRank(int priorRank) {return (priorRank + numLeft + 1);}
 };
 
 
@@ -54,7 +52,7 @@ class AVLVector {
     int findRank(Node* node, int e, int priorRank = 0); //finds rank of inputted element, called in rankOf
     int elementAtRankHelper(Node* node, int r, int& priorRank); //finds element at inputted rank, called in elementAtRank
     Node* getNodeAtRank(Node* node, int rank, int priorRank = 0); //gets the node at inputted rank, called in replaceAtRank
-    void inOrderPrintByRank(Node* node, int& priorRank); //prints tree (rank and elements in order of rank)
+    void inOrderPrint(Node* node, int& priorRank); //prints tree (rank and elements in order of rank)
     void deleteTree(Node* node); //destructor helper function for deleting entire tree
 
     //rotations
@@ -62,9 +60,6 @@ class AVLVector {
     Node* rightRightRotation(Node* &temp);
     Node* leftRightRotation(Node* &temp);
     Node* rightLeftRotation(Node* &temp);
-    
-    //testing print function
-    void inOrderPrintWithChildren(Node* node, int& priorRank);
 
     public:
     AVLVector() : root(nullptr) {} //constructor
@@ -77,10 +72,6 @@ class AVLVector {
     int removeAtRank(int r);
     int rankOf(int e);
     void printAll();
-
-    //helper functions for testing
-    void preorder(Node* root);
-    void inorder(Node* root);
 
     //inline getter functions
     Node* getRoot() {return root;}
