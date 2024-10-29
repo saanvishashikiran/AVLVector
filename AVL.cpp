@@ -604,8 +604,6 @@ int AVLVector::deleteNode(Node* &root, int rank) {
 
 
 
-
-
 /****************************************************************************
  *                   AVLTree inOrderPrint Helper Function                   *
  * About: Outputs rank and element for each node in the AVL tree in order   *
@@ -703,12 +701,7 @@ void AVLVector::inOrderPrintWithChildren(Node *node, int &priorRank)
  * by traversing left subtree, incrementing rank if not found in left       *
  * subtree, checking if the current node's value is a match with the given  *
  * element, and if not, continues searching in right subtree.               *
- *                                                                          *
- * Runtime: O(logN) because the height of an AVL tree is O(logN). Since     *
- * this function recursively traverses the tree, the worst case is visiting *
- * every node along a path from the root to a leaf, which matches height.   *
  ****************************************************************************/
-
 
 int AVLVector::findRank(Node *node, int e, int priorRank)
 {
@@ -874,7 +867,8 @@ void AVLVector::deleteTree(Node *node)
  * before calling elementAtRankHelper to return the element at the inputted *
  * rank.                                                                    *
  *                                                                          *
- * Runtime: O(logN)                                                         *
+ * Runtime: O(logN), calls elementAtRankHelper which is O(logN), and all    *
+ * other operations run in constant time.                                   *
  ****************************************************************************/
 
 int AVLVector::elementAtRank(int r)
@@ -918,7 +912,8 @@ int AVLVector::replaceAtRank(int r, int e)
         return -1;
     }
 
-    Node *node = getNodeAtRank(root, r);
+    Node *node = getNodeAtRank(root, r); //calling helper function to find node 
+
     if (node)
     {
         node->value = e; //replacing the value with e
@@ -943,6 +938,7 @@ int AVLVector::replaceAtRank(int r, int e)
 
 int AVLVector::insertAtRank(int r, int e)
 {
+    //bound check
     if ((root == nullptr && r != 1) || r <= 0 || (root != nullptr && r > root->size + 1)) // +1 to account for insertion at the end
     {
         cout << "Rank is out of bounds!\n" << endl;
@@ -951,12 +947,11 @@ int AVLVector::insertAtRank(int r, int e)
 
     int result;
 
-    if (root == NULL)
+    if (root == NULL) //manual insertion if root is null
     {
-        // manual insert
         Node *newNode = new Node(e);
-        newNode->size = 1;   // this node is the only node in its subtree
-        newNode->height = 1; // single node has height 1
+        newNode->size = 1;   //this node is the only node in its subtree
+        newNode->height = 1; //single node has height 1
         newNode->left = NULL;
         newNode->right = NULL;
         newNode->parent = NULL;
@@ -982,18 +977,20 @@ int AVLVector::insertAtRank(int r, int e)
  ****************************************************************************/
 
 int AVLVector::removeAtRank(int r) {
+    //check for empty tree
     if (root == nullptr) {
         cout << "Tree is empty, cannot remove any elements!\n" << endl;
         return -1;
     }
 
+    //bounds check
     if (r <= 0 || (root != nullptr && r > root->size)) 
     {
         cout << "Rank is out of bounds!\n" << endl;
         return -1;
     }
 
-    int result = deleteNode(root, r); 
+    int result = deleteNode(root, r); //calling deleteNode helper function
 
     if (root != NULL) {
         root->parent = NULL;  //ensuring the root's parent is always NULL
@@ -1006,16 +1003,14 @@ int AVLVector::removeAtRank(int r) {
 
 /****************************************************************************
  *                   Extra Credit: AVLVector rankOf Function                *
- * About: Finds the rank of the inputted element.                           *
- *                                                                          *
- * Runtime:                                                                 *
+ * About: Finds the rank of the inputted element by calling findRank.       *
  ****************************************************************************/
 
 int AVLVector::rankOf(int e)
 {   
     int priorRank = 0;
-    int result = findRank(root, e, priorRank); // Start with rankOffset of 0
-    if (result == -1)
+    int result = findRank(root, e, priorRank); //calling findRank helper function
+    if (result == -1) 
     {
         cout << "Error: Element not found!" << endl;
         return -1;

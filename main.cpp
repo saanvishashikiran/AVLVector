@@ -5,119 +5,134 @@ int main () {
 
     AVLVector vect;
 
-    // our test
-    vect.insertAtRank(1, 101);
-    vect.insertAtRank(1, 102);
-    vect.insertAtRank(3, 103);
-    vect.insertAtRank(2, 104);
-    vect.insertAtRank(1, 105);
-    vect.insertAtRank(1, 106);
-    vect.insertAtRank(5, 107);
-    vect.insertAtRank(6, 108);
-    vect.insertAtRank(9, 109);
-    vect.insertAtRank(4, 110);
-    vect.insertAtRank(6, 111);
-    vect.insertAtRank(12, 112);
-    vect.insertAtRank(5, 113);
-    vect.insertAtRank(4, 114);
-    vect.insertAtRank(3, 115);
-    vect.insertAtRank(1, 116);
-    vect.insertAtRank(11, 117);
-    vect.insertAtRank(6, 118);
-    vect.insertAtRank(15, 119);
-    vect.insertAtRank(4, 120);
-
-    cout << endl;
-    cout << "outputting rank of 120: ";
-    cout << vect.rankOf(120);
-    cout << endl;
-
-
-    // // bala's test
-    // vect.insertAtRank(1, 23);
-    // vect.insertAtRank(2, 12);
-    // vect.insertAtRank(1, 45);
-    // vect.insertAtRank(4, 10);
-    // vect.insertAtRank(5, 55);
-    // vect.insertAtRank(3, 16);
-    // vect.insertAtRank(4, 77);
+    // // our test
+    // vect.insertAtRank(1, 101);
+    // vect.insertAtRank(1, 102);
+    // vect.insertAtRank(3, 103);
+    // vect.insertAtRank(2, 104);
+    // vect.insertAtRank(1, 105);
+    // vect.insertAtRank(1, 106);
+    // vect.insertAtRank(5, 107);
     // vect.insertAtRank(6, 108);
+    // vect.insertAtRank(9, 109);
+    // vect.insertAtRank(4, 110);
+    // vect.insertAtRank(6, 111);
+    // vect.insertAtRank(12, 112);
+    // vect.insertAtRank(5, 113);
+    // vect.insertAtRank(4, 114);
+    // vect.insertAtRank(3, 115);
+    // vect.insertAtRank(1, 116);
+    // vect.insertAtRank(11, 117);
+    // vect.insertAtRank(6, 118);
+    // vect.insertAtRank(15, 119);
+    // vect.insertAtRank(4, 120);
 
-    // vect.printAll();
-    
-    // vect.insertAtRank(4, 123);
-    // vect.insertAtRank(8, 128);
-    // vect.insertAtRank(5, 451);
-    // vect.insertAtRank(7, 109);
-    // vect.insertAtRank(10, 525);
-    // vect.insertAtRank(13, 136);
-    // vect.insertAtRank(2, 727);
-    // vect.insertAtRank(5, 128);
-    // vect.replaceAtRank(4, 102);
-
-    // vect.removeAtRank(6);  
-    // vect.removeAtRank(12);    
-    // vect.insertAtRank(2, 431); 
-    // vect.insertAtRank(6, 139); 
-    // vect.insertAtRank(10, 325);
-    // vect.insertAtRank(4, 236);
-    // vect.removeAtRank(14);
-    // vect.removeAtRank(7);
-
-    // vect.insertAtRank(1, 31); 
-    // vect.insertAtRank(14, 79); 
-
-    // vect.printAll();
-    
-    // cout << "elements at ranks 1-9: " << endl;
-    // vect.elementAtRank(1),
-    // vect.elementAtRank(2),
-    // vect.elementAtRank(3),
-    // vect.elementAtRank(4),
-    // vect.elementAtRank(5),
-    // vect.elementAtRank(6),
-    // vect.elementAtRank(7),
-    // vect.elementAtRank(8),
-    // vect.elementAtRank(9),
-
-    // vect.printAll();
-
-    // vect.replaceAtRank(1, 1);
-    // vect.replaceAtRank(2, 2);
-    // vect.replaceAtRank(3, 3);
-    // vect.replaceAtRank(4, 4);
-    // vect.replaceAtRank(5, 5);
-    // vect.replaceAtRank(6, 6);
-    // vect.replaceAtRank(7, 7);
-    // vect.replaceAtRank(8, 8);
-    // vect.replaceAtRank(9, 9);
-    // vect.replaceAtRank(10, 10);
-    // vect.replaceAtRank(11, 11);
-    // vect.replaceAtRank(12, 12);
-    // vect.replaceAtRank(13, 13);
-    // vect.replaceAtRank(14, 14);
-    // vect.replaceAtRank(15, 15);
-    // vect.replaceAtRank(16, 16);
-    // vect.replaceAtRank(17, 17);
-    // vect.replaceAtRank(18, 18);
-
-    // vect.printAll();
-
-    // vect.removeAtRank(13); 
-    // vect.removeAtRank(6); 
-    // vect.removeAtRank(4); 
-
-    // vect.printAll();
-
-    // vect.removeAtRank(10);
+    // vect.removeAtRank(11);
+    // vect.removeAtRank(1);
+    // vect.removeAtRank(13);
     // vect.removeAtRank(4);
-    // vect.removeAtRank(6);
+    // vect.insertAtRank(7, 200);
+    // vect.removeAtRank(9);
+    // vect.removeAtRank(2);
+    // vect.insertAtRank(11, 300);
+    // vect.removeAtRank(13);
 
-    // vect.printAll();
 
-    // vect.removeAtRank(7);
-    // vect.removeAtRank(7);
-    // vect.removeAtRank(7);
+    // cout << endl;
+    // cout << "outputting rank of 120: ";
+    // cout << vect.rankOf(120);
+    // cout << endl;
+
+    // cout << endl;
+    // cout << "outputting rank of 113: ";
+    // cout << vect.rankOf(113);
+    // cout << endl;
+
+
+
+    // bala's test
+    vect.insertAtRank(1, 23);
+    vect.insertAtRank(2, 12);
+    vect.insertAtRank(1, 45);
+    vect.insertAtRank(4, 10);
+    vect.insertAtRank(5, 55);
+    vect.insertAtRank(3, 16);
+    vect.insertAtRank(4, 77);
+    vect.insertAtRank(6, 108);
+
+    vect.printAll();
+    
+    vect.insertAtRank(4, 123);
+    vect.insertAtRank(8, 128);
+    vect.insertAtRank(5, 451);
+    vect.insertAtRank(7, 109);
+    vect.insertAtRank(10, 525);
+    vect.insertAtRank(13, 136);
+    vect.insertAtRank(2, 727);
+    vect.insertAtRank(5, 128);
+    vect.replaceAtRank(4, 102);
+
+    vect.removeAtRank(6);  
+    vect.removeAtRank(12);    
+    vect.insertAtRank(2, 431); 
+    vect.insertAtRank(6, 139); 
+    vect.insertAtRank(10, 325);
+    vect.insertAtRank(4, 236);
+    vect.removeAtRank(14);
+    vect.removeAtRank(7);
+
+    vect.insertAtRank(1, 31); 
+    vect.insertAtRank(14, 79); 
+
+    vect.printAll();
+    
+    cout << "elements at ranks 1-9: " << endl;
+    cout << vect.elementAtRank(1) << endl;
+    cout << vect.elementAtRank(2) << endl;
+    cout << vect.elementAtRank(3) << endl;
+    cout << vect.elementAtRank(4) << endl;
+    cout << vect.elementAtRank(5) << endl;
+    cout << vect.elementAtRank(6) << endl;
+    cout << vect.elementAtRank(7) << endl;
+    cout << vect.elementAtRank(8) << endl;
+    cout << vect.elementAtRank(9) << endl;
+
+    vect.replaceAtRank(1, 1);
+    vect.replaceAtRank(2, 2);
+    vect.replaceAtRank(3, 3);
+    vect.replaceAtRank(4, 4);
+    vect.replaceAtRank(5, 5);
+    vect.replaceAtRank(6, 6);
+    vect.replaceAtRank(7, 7);
+    vect.replaceAtRank(8, 8);
+    vect.replaceAtRank(9, 9);
+    vect.replaceAtRank(10, 10);
+    vect.replaceAtRank(11, 11);
+    vect.replaceAtRank(12, 12);
+    vect.replaceAtRank(13, 13);
+    vect.replaceAtRank(14, 14);
+    vect.replaceAtRank(15, 15);
+    vect.replaceAtRank(16, 16);
+    vect.replaceAtRank(17, 17);
+    vect.replaceAtRank(18, 18);
+
+    vect.printAll();
+
+    vect.removeAtRank(13); 
+    vect.removeAtRank(6); 
+    vect.removeAtRank(4); 
+
+    vect.printAll();
+
+    vect.removeAtRank(10);
+    vect.removeAtRank(4);
+    vect.removeAtRank(6);
+
+    vect.printAll();
+
+    vect.removeAtRank(7);
+    vect.removeAtRank(7);
+    vect.removeAtRank(7);
 
     cout << endl;
     cout << "current root is " << vect.getRoot()->value << endl;
@@ -127,7 +142,15 @@ int main () {
     cout << endl;
     vect.preorder(vect.getRoot());
 
-
+    cout << "rank of 1 is: " << vect.rankOf(1) << endl;
+    cout << "rank of 2 is: " << vect.rankOf(2) << endl;
+    cout << "rank of 3 is: " << vect.rankOf(3) << endl;
+    cout << "rank of 7 is: " << vect.rankOf(7) << endl;
+    cout << "rank of 8 is: " << vect.rankOf(8) << endl;
+    cout << "rank of 10 is: " << vect.rankOf(10) << endl;
+    cout << "rank of 16 is: " << vect.rankOf(16) << endl;
+    cout << "rank of 17 is: " << vect.rankOf(17) << endl;
+    cout << "rank of 18 is: " << vect.rankOf(18) << endl;
 
     return 0;
 
