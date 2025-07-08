@@ -17,7 +17,7 @@
 
 void AVLVector::setHeight(Node *node)
 {
-    if (node) //if node isn't null
+    if (node) 
     {
         if (!node->left && !node->right) //if node is a leaf
             node->height = 0;
@@ -52,8 +52,8 @@ void AVLVector::updateSize(Node *&node)
     int leftSize = (node->left != NULL) ? node->left->size : 0; 
     int rightSize = (node->right != NULL) ? node->right->size : 0;
 
-    node->size = leftSize + rightSize + 1; //updating size of node
-    node->numLeft = leftSize; //updating numLeft of node
+    node->size = leftSize + rightSize + 1; 
+    node->numLeft = leftSize; 
 }
 
 
@@ -71,7 +71,7 @@ void AVLVector::updateSize(Node *&node)
 int AVLVector::getBalance(Node *node)
 {
     int leftSubtreeHeight, rightSubtreeHeight;
-    if (!node) //check for null node
+    if (!node) 
     {
         return 0;
     }
@@ -128,8 +128,7 @@ int AVLVector::getBalance(Node *node)
 int AVLVector::insertNode(Node *&currentNode, int priorRank, int val, int rank)
 {
     //creating a new node if currentNode (root) is null (base case!)
-    if (currentNode == NULL)
-    {
+    if (currentNode == NULL) {
         currentNode = new Node(val);
         currentNode->size = 1;   
         currentNode->height = 0; 
@@ -144,8 +143,7 @@ int AVLVector::insertNode(Node *&currentNode, int priorRank, int val, int rank)
     int currentNodeRank = temp->numLeft + priorRank + 1; //calculating rank of current node (the root)
 
     //inserting into the left subtree or at the current node's rank
-    if (rank <= currentNodeRank)
-    { 
+    if (rank <= currentNodeRank) { 
         //handling numLeft if inserting at a rank that collides
         if (rank == temp->numLeft + 1)
         {
@@ -156,10 +154,7 @@ int AVLVector::insertNode(Node *&currentNode, int priorRank, int val, int rank)
         int result = insertNode(temp->left, priorRank, val, rank); //recursive call for left subtree
         temp->left->parent = temp; //updating parent
         temp->numLeft += 1; //incrementing numLeft since we just inserted into the left subtree
-    }
-    // inserting into the right subtree
-    else
-    {
+    } else { // inserting into the right subtree
         //adjusting rank for insertion into the right subtree
         priorRank = currentNodeRank; //resetting priorRank to currentNodeRank (needs to include temp->numLeft + 1 in rank calculations for right subtree)
         int result = insertNode(temp->right, priorRank, val, rank); //recursive call for right subtree
@@ -172,27 +167,19 @@ int AVLVector::insertNode(Node *&currentNode, int priorRank, int val, int rank)
 
     //balancing the tree
     int balanceFactor = getBalance(temp);
-    if (balanceFactor > 1)
-    {
+    if (balanceFactor > 1){
         int leftBalanceFactor = getBalance(temp->left);
-        if (leftBalanceFactor >= 0)
-        {
+        if (leftBalanceFactor >= 0) {
             temp = leftLeftRotation(temp); //left-left case
-        }
-        else
-        {
+        } else {
             temp = leftRightRotation(temp); //left-right case
         }
-    }
-    else if (balanceFactor < -1)
+    } else if (balanceFactor < -1)
     {
         int rightBalanceFactor = getBalance(temp->right);
-        if (rightBalanceFactor <= 0)
-        {
+        if (rightBalanceFactor <= 0) {
             temp = rightRightRotation(temp); //right-right case
-        }
-        else
-        {
+        } else {
             temp = rightLeftRotation(temp); //right-left case
         }
     }
@@ -467,11 +454,11 @@ void AVLVector::decrementNumLeft(Node* node) {
 
 Node* AVLVector::searchByRank(Node *some, int rank, int priorRank) {
     if (some == NULL) {
-        return NULL; // Rank not found
+        return NULL; //rank not found
     }
 
     while (some != NULL) {
-        int currentRank = priorRank + some->numLeft + 1; // using numLeft to calculate current rank
+        int currentRank = priorRank + some->numLeft + 1; //using numLeft to calculate current rank
 
         if (currentRank == rank) {
             return some; //returning the node at the given rank
