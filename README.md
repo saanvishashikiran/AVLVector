@@ -20,6 +20,11 @@ A C++ implementation of a dynamic vector-like container using an AVL tree for ef
 - `PRINT`: Outputs all elements in rank order
 - `QUIT`: Exits the program
 
+## Instructions for compiling and running code:
+
+- Compile by typing "g++ AVL.cpp main.cpp" into the command line and hitting enter
+- Run code by typing "./a.out" into the command line and hitting enter
+
 ## Example Usage
 
 ```bash
