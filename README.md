@@ -1,4 +1,4 @@
-# AVL Vector
+# AVL Vector Class
 
 A C++ implementation of a dynamic vector-like container using an AVL tree for efficient indexed operations. This data structure maintains elements in ranked order and supports insertion, deletion, replacement, and search operations in `O(log N)` time.
 
